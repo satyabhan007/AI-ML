@@ -1,1 +1,202 @@
-IyBBSSBFbmdpbmVlcmluZyBMZWFybmluZyDigJQgU2Vzc2lvbiBOb3Rlcwo+IERhdGU6IDIwMjYtMDktMDYgfCBTdGF0dXM6IEluIFByb2dyZXNzCgotLS0KCiMjIFF1ZXN0aW9ucyBBc2tlZCBUaGlzIFNlc3Npb24KCi0tLQoKIyMjIFExIOKAlCBXaGljaCBBSSBFbmdpbmVlcmluZyBwcm9qZWN0IHNob3VsZCBJIHN0YXJ0IHdpdGg/CgoqKkNvbnRleHQ6KiogR2l2ZW4gYSBsaXN0IG9mIDUwKyBBSSBlbmdpbmVlcmluZyBwcm9qZWN0cyAoQXV0b2dyYWQsIFRyYW5zZm9ybWVyLCBSQUcsIENVREEga2VybmVscywgZXRjLiksIGFza2VkIHdoaWNoIHRvIHN0YXJ0IHdpdGggdG8gbGVhcm4gQUkgaW1wbGVtZW50YXRpb24gZnJvbSBiYXNpY3MgdG8gYWR2YW5jZWQuCgoqKkFuc3dlciDigJQgVGhlIHJlY29tbWVuZGVkIG9yZGVyIChmdWxsIHBhdGgpOioqCgojIyMjIEZvdW5kYXRpb24gTGF5ZXIKMS4gKipBdXRvZ3JhZCBlbmdpbmUqKiAoYE1pY3JvZ3JhZGApIOKAlCB1bmRlcnN0YW5kIGJhY2twcm9wYWdhdGlvbiAmIGdyYWRpZW50cwoyLiAqKlRva2VuaXplcioqIChgQlBFYCkgIOKAlCB1bmRlcnN0YW5kIGhvdyB0ZXh0IGJlY29tZXMgbnVtYmVycwozLiAqKk1hdHJpeCBNdWx0aXBsaWNhdGlvbiBrZXJuZWwqKiDigJQgdW5kZXJzdGFuZCB3aGF0IGhhcmR3YXJlIGV4ZWN1dGVzCgojIyMjIENvcmUgTW9kZWxzCjQuICoqVHJhbnNmb3JtZXIgZnJvbSBzY3JhdGNoKiogKGBBdHRlbnRpb24gaXMgQWxsIFlvdSBOZWVkYCkKNS4gKipTbWFsbCBMYW5ndWFnZSBNb2RlbCAoU0xNKSoqIOKAlCBhcHBseSB0cmFuc2Zvcm1lciBlbmQtdG8tZW5kCjYuICoqU29mdG1heCBrZXJuZWwgb3B0aW1pemF0aW9uKiogIOKAlCBudW1lcmljYWwgc3RhYmlsaXR5CjcuICoqRmxhc2ggQXR0ZW50aW9uIGtlcm5lbCoqIChDVURBKSDigJQgdW5kZXJzdGFuZCB3aHkgaXQgZXhpc3RzCgojIyMjIEFnZW50ICYgUmVhc29uaW5nCjguICoqQ2hhaW4gb2YgVGhvdWdodCBSZWFzb25lcioqCjkuICoqUmVBY3QgQWdlbnQgbG9vcCoqIOKAlCB0b29sIHVzZSArIHJlYXNvbmluZwoxMC4gKipGdW5jdGlvbiBDYWxsaW5nIHJvdXRlcioqCjExLiAqKlN0cnVjdHVyZWQgT3V0cHV0IHBhcnNlcioqIChDRkdzKQoKIyMjIyBNZW1vcnkgJiBSZXRyaWV2YWwKMTIuICoqVmVjdG9yIERhdGFiYXNlKiogKEhOU1cgaW5kZXgpCjEzLiAqKkVtYmVkZGluZyBtb2RlbCoqCjE0LiAqKlJBRyBwaXBlbGluZSoqCjE1LiAqKkdyYXBoIFJBRyBzeXN0ZW0qKgoKIyMjIyBUcmFpbmluZyAmIE9wdGltaXphdGlvbgoxNi4gKipMb1JBIHRyYWluZXIqKgoxNy4gKipEUE8gbG9zcyBmdW5jdGlvbioqCjE4LiAqKlJMSEYgcGlwZWxpbmUqKiAoUFBPKQoxOS4gKipRdWFudGl6YXRpb24gbGlicmFyeSoqIChJbnQ4L0ZQNCkKMjAuICoqS1YgQ2FjaGUgcGFnaW5nIHN5c3RlbSoqICh2TExNLXN0eWxlKQoKKipUTDtEUiDigJQgMy1wcm9qZWN0IHN0YXJ0ZXIgcGFjazoqKgpgYGAKMS4gQXV0b2dyYWQgZW5naW5lICDihpIgIHVuZGVyc3RhbmQgbGVhcm5pbmcKMi4gVHJhbnNmb3JtZXIgZnJvbSBzY3JhdGNoICDihpIgIHVuZGVyc3RhbmQgbW9kZWxzCjMuIFJlQWN0IEFnZW50IGxvb3AgIOKGkiAgdW5kZXJzdGFuZCBhZ2VudHMKYGBgCgotLS0KCiMjIyBRMiDigJQgV2hlcmUgZG8gSSBzdGFydCBsZWFybmluZyB0aGUgMyBmb3VuZGF0aW9uYWwgcHJvamVjdHM/CgoqKkFuc3dlciDigJQgQ29uY3JldGUgcmVzb3VyY2VzICYgc2NoZWR1bGU6KioKCiMjIyMgMS4gQXV0b2dyYWQgRW5naW5lIChXZWVrIDHigJMyKQotICoqV2F0Y2g6KiogQW5kcmVqIEthcnBhdGh5IOKAlCAqIlRoZSBzcGVsbGVkLW91dCBpbnRybyB0byBuZXVyYWwgbmV0d29ya3MgYW5kIGJhY2twcm9wYWdhdGlvbjogYnVpbGRpbmcgbWljcm9ncmFkIioKICAtIGB5b3V0dWJlLmNvbS93YXRjaD92PVZNai0zUzF0a3UwYAotICoqUmVhZDoqKiBgZ2l0aHViLmNvbS9rYXJwYXRoeS9taWNyb2dyYWRgIOKAlCAxNTAgbGluZXMsIHJlYWQgZXZlcnkgbGluZQotICoqQ29yZSBjb25jZXB0OioqIENoYWluIHJ1bGUsIGNvbXB1dGF0aW9uYWwgZ3JhcGhzLCBgLmdyYWRgIG9uIGV2ZXJ5IG5vZGUKCiMjIyMgMi4gVHJhbnNmb3JtZXIgZnJvbSBTY3JhdGNoIChXZWVrIDPigJM2KQotICoqV2F0Y2g6KiogQW5kcmVqIEthcnBhdGh5IOKAlCAqIkxldCdzIGJ1aWxkIEdQVCBmcm9tIHNjcmF0Y2giKgogIC0gYHlvdXR1YmUuY29tL3dhdGNoP3Y9a0NjOEZtRWIxbllgCi0gKipQYXBlcjoqKiAqIkF0dGVudGlvbiBJcyBBbGwgWW91IE5lZWQiKiDigJQgVmFzd2FuaSBldCBhbC4gMjAxNyAoZm9jdXMgb24gRmlndXJlIDEgKyBTZWN0aW9uIDMpCi0gKipSZWFkOioqIGBnaXRodWIuY29tL2thcnBhdGh5L25hbm9HUFRgCi0gKipDb3JlIGNvbmNlcHQ6KiogU2VsZi1hdHRlbnRpb24sIHBvc2l0aW9uYWwgZW5jb2Rpbmcsb3doeSB0cmFuc2Zvcm1lcnMgcmVwbGFjZWQgUk5OcwoKIyMjIyAzLiBSZUFjdCBBZ2VudCBMb29wIChXZWVrIDfigJM4KQotICoqUmVhZDoqKiAqIlJlQWN0OiBTeW5lcmdpemluZyBSZWFzb25pbmcgYW5kIEFjdGluZyBpbiBMYW5ndWFnZSBNb2RlbHMiKiDigJQgWWFvIGV0IGFsLiAyMDIyCiAgLSBgYXJ4aXYub3JnL2Ficy8yMjEwLjAzNjI5YCAoanVzdCBhYnN0cmFjdCArIEZpZ3VyZSAxKQotICoqQ29yZSBjb25jZXB0OioqIFRob3VnaHQg4oaSIEFjdGlvbiDihpIgT2JzZXJ2YXRpb24gbG9vcAotICoqQ29yZSBjb2RlIHBhdHRlcm46KioKICBgYGBweXRob24KICB3aGlsZSBub3QgZG9uZToKICAgICAgdGhvdWdodCA9IGxsbShwcm9tcHQgKyBoaXN0b3J5KQogICAgICBhY3Rpb24gPSBwYXJzZV9hY3Rpb24odGhvdWdodCkKICAgICAgb2JzZXJ2YXRpb24gPSB0b29sc1thY3Rpb24ubmFtZV0oYWN0aW9uLmlucHV0KQogICAgICBoaXN0b3J5ICs9IGYiVGhvdWdodDoge3Rob3VnaHR9XG5PYnNlcnZhdGlvbjoge29ic2VydmF0aW9ufVxuIgogIGBgYAoKKipXZWVrbHkgU2NoZWR1bGU6KioKCnwgV2VlayB8IFRhc2sgfCBUaW1lL2RheSB8CnwtLS0tLS18LS0tLS0tfC0tLS0tLS0tLS18CnwgMSB8IFdhdGNoIEthcnBhdGh5IG1pY3JvZ3JhZCB2aWRlbyB8IDJoIHwKfCAyIHwgUmV3cml0ZSBtaWNyb2dyYWQgZnJvbSBzY3JhdGNoIChucGVla2luZykgfCAyaCB8CnwgM+KAkzQgfCBXYXRjaCBLYXJwYXRoeSBHUFQgdmlkZW8sIGNvZGUgYWxvbmcgfCAyaCB8CnwgNeKAkzYgfCBUcmFpbiBuYW5vR1BUIG9uIGEgc21hbGwgdGV4dCBkYXRhc2V0IHwgMeKAkzJoIHwKfCA3IHwgUmVhZCBSZUFjdCBwYXBlciwgYnVpbGQgYmFzaWMgdG9vbCBsb29wIHwgMmggfAp8IDggfCBBZGQgMyByZWFsIHRvb2xzIChzZWFyY2gsIGNhbGN1bGF0b3IsIGNvZGUgcnVubmVyKSB8IDJoIHwKCioqUHJlcmVxdWlzaXRlczoqKgotIFB5dGhvbiAoaW50ZXJtZWRpYXRlKQotIE51bVB5IOKAlCBtYXRyaXggb3BzIChgQGAsIHJlc2hhcGUsIGJyb2FkY2FzdGluZykKLSBCYXNpYyBjYWxjdWx1cyDigJQganVzdCBkZXJpdmF0aXZlczogYGQvZHgoeMKyKSA9IDJ4YAoKPiAqKkdvbGRlbiBSdWxlOioqIEJ1aWxkLCBkb24ndCBqdXN0IHdhdGNoLgoKLS0tCgojIyMgUTMg4oCUIExldCdzIHN0YXJ0IG1pY3JvZ3JhZCBmcm9tIHNjcmF0Y2gKCioqQW5zd2VyIOKAlCBCdWlsdCBhIGNvbXBsZXRlIG1pY3JvZ3JhZCBpbXBsZW1lbnRhdGlvbjoqKgoKUmVzdWx0czoKYGBgClN0ZXAgMCAgbG9zcz0xLjAxNDAxMCAgYWNjdXJhY3k9NTAlClN0ZXAgMjAgIGxvc3M9MC4yMTkyNDYgIGFjY3VyYWN5PTEwMCUKU3RlcCA0MCAgbG9zcz0wLjAwNTMxOSAgYWNjdXJhY3k9MTAwJQpgYGAKCi0tLQoKIyMjIFE0IOKAlCBXaGF0IGlzIG1pY3JvZ3JhZD8KCk1pY3JvZ3JhZCBpcyBhIH4xNTAtbGluZSBpbXBsZW1lbnRhdGlvbiBvZiAqKmJhY2twcm9wYWdhdGlvbioqIC0gdGhlIGFsZ29yaXRobSB0aGF0IG1ha2VzIG5ldXJhbCBuZXR3b3JrcyBsZWFybi4KCi0tLQoKIyMgTmV4dCBTdGVwcwoKLSBbIF0gQ29tcGxldGUgbWljcm9ncmFkIGhvbWV3b3JrIGV4ZXJjaXNlcwotIFsgXSBXYXRjaCBLYXJwYXRoeSdzIEdQVCB2aWRlbwotIFsgXSBCdWlsZCBUcmFuc2Zvcm1lciBmcm9tIHNjcmF0Y2gKLSBbIF0gQnVpbGQgUmVBY3QgQWdlbnQgbG9vcAo=
+# AI Engineering Learning — Session Notes
+> Date: 2026-09-06 | Status: In Progress
+
+---
+
+## Questions Asked This Session
+
+---
+
+### Q1 — Which AI Engineering project should I start with?
+
+**Context:** Given a list of 50+ AI engineering projects (Autograd, Transformer, RAG, CUDA kernels, etc.), asked which to start with to learn AI implementation from basics to advanced.
+
+**Answer — The recommended order (full path):**
+
+#### Foundation Layer
+1. **Autograd engine** (`Micrograd`) — understand backpropagation & gradients
+2. **Tokenizer** (`BPE`) — understand how text becomes numbers
+3. **Matrix Multiplication kernel** — understand what hardware executes
+
+#### Core Models
+4. **Transformer from scratch** (`Attention is All You Need`)
+5. **Small Language Model (SLM)** — apply transformer end-to-end
+6. **Softmax kernel optimization** — numerical stability
+7. **Flash Attention kernel** (CUDA) — understand why it exists
+
+#### Agent & Reasoning
+8. **Chain of Thought Reasoner**
+9. **ReAct Agent loop** — tool use + reasoning
+10. **Function Calling router**
+11. **Structured Output parser** (CFGs)
+
+#### Memory & Retrieval
+12. **Vector Database** (HNSW index)
+13. **Embedding model**
+14. **RAG pipeline**
+15. **Graph RAG system**
+
+#### Training & Optimization
+16. **LoRA trainer**
+17. **DPO loss function**
+18. **RLHF pipeline** (PPO)
+19. **Quantization library** (Int8/FP4)
+20. **KV Cache paging system** (vLLM-style)
+
+**TL;DR — 3-project starter pack:**
+```
+1. Autograd engine  →  understand learning
+2. Transformer from scratch  →  understand models
+3. ReAct Agent loop  →  understand agents
+```
+
+---
+
+### Q2 — Where do I start learning the 3 foundational projects?
+
+**Answer — Concrete resources & schedule:**
+
+#### 1. Autograd Engine (Week 1–2)
+- **Watch:** Andrej Karpathy — *"The spelled-out intro to neural networks and backpropagation: building micrograd"*
+  - `youtube.com/watch?v=VMj-3S1tku0`
+- **Read:** `github.com/karpathy/micrograd` — 150 lines, read every line
+- **Core concept:** Chain rule, computational graphs, `.grad` on every node
+
+#### 2. Transformer from Scratch (Week 3–6)
+- **Watch:** Andrej Karpathy — *"Let's build GPT from scratch"*
+  - `youtube.com/watch?v=kCc8FmEb1nY`
+- **Paper:** *"Attention Is All You Need"* — Vaswani et al. 2017 (focus on Figure 1 + Section 3)
+- **Read:** `github.com/karpathy/nanoGPT`
+- **Core concept:** Self-attention, positional encoding, why transformers replaced RNNs
+
+#### 3. ReAct Agent Loop (Week 7–8)
+- **Read:** *"ReAct: Synergizing Reasoning and Acting in Language Models"* — Yao et al. 2022
+  - `arxiv.org/abs/2210.03629` (just abstract + Figure 1)
+- **Core concept:** Thought → Action → Observation loop
+- **Core code pattern:**
+  ```python
+  while not done:
+      thought = llm(prompt + history)
+      action = parse_action(thought)
+      observation = tools[action.name](action.input)
+      history += f"Thought: {thought}\nObservation: {observation}\n"
+  ```
+
+**Weekly Schedule:**
+
+| Week | Task | Time/day |
+|------|------|----------|
+| 1 | Watch Karpathy micrograd video | 2h |
+| 2 | Rewrite micrograd from scratch (no peeking) | 2h |
+| 3–4 | Watch Karpathy GPT video, code along | 2h |
+| 5–6 | Train nanoGPT on a small text dataset | 1–2h |
+| 7 | Read ReAct paper, build basic tool loop | 2h |
+| 8 | Add 3 real tools (search, calculator, code runner) | 2h |
+
+**Prerequisites:**
+- Python (intermediate)
+- NumPy — matrix ops (`@`, reshape, broadcasting)
+- Basic calculus — just derivatives: `d/dx(x²) = 2x`
+
+> **Golden Rule:** Build, don't just watch. After every video, close it and rewrite the code from a blank file.
+
+---
+
+### Q3 — Let's start micrograd from scratch
+
+**Answer — Built a complete micrograd implementation:**
+
+Files created in `micrograd/`:
+
+| File | Purpose |
+|------|---------|
+| [`engine.py`](engine.py) | The autograd engine — `Value` class with forward + backward pass |
+| [`nn.py`](nn.py) | `Neuron`, `Layer`, `MLP` built on top of engine |
+| [`step1_just_values.py`](step1_just_values.py) | Gradients & chain rule with manual math verification |
+| [`step2_one_neuron.py`](step2_one_neuron.py) | One neuron, gradient descent, full training loop |
+| [`step3_full_network.py`](step3_full_network.py) | Full MLP → 100% accuracy on toy dataset |
+
+**Results from running:**
+```
+Step 3 — MLP training on 4-sample classification dataset:
+  Step  0:  loss=1.014010  accuracy=50%
+  Step 20:  loss=0.219246  accuracy=100%
+  Step 40:  loss=0.005319  accuracy=100%
+
+Final Predictions:
+  Sample 1: pred=+1.0201  target=+1  ✓
+  Sample 2: pred=-1.7564  target=-1  ✓
+  Sample 3: pred=+1.2068  target=+1  ✓
+  Sample 4: pred=-1.0829  target=-1  ✓
+```
+
+**The core engine in ~20 lines (conceptually):**
+```python
+class Value:
+    def __init__(self, data):
+        self.data = float(data)
+        self.grad = 0.0
+        self._backward = lambda: None
+        self._children = set()
+
+    def __mul__(self, other):
+        out = Value(self.data * other.data, (self, other))
+        def _backward():
+            self.grad  += out.grad * other.data  # chain rule
+            other.grad += out.grad * self.data
+        out._backward = _backward
+        return out
+
+    def backward(self):
+        # topological sort → seed grad=1.0 → call _backward() in reverse
+        ...
+```
+
+**Homework before moving to Transformer:**
+- [ ] Delete `__mul__` from `engine.py`. Rewrite it from memory.
+- [ ] Modify step2 — get output to exactly `0.999`. Experiment with learning rate.
+- [ ] Add a 5th sample to step3 with inputs `[0.0, 0.0, 0.0]` and label `+1`. Does it still converge?
+- [ ] Draw the computation graph for `e = a*b + (a+b)` on paper. Trace the backward pass manually.
+
+---
+
+### Q4 — What is micrograd?
+
+**Answer:**
+
+Micrograd is a ~150-line implementation of **backpropagation** — the algorithm that makes neural networks learn.
+
+**The problem it solves:**
+> "If I increase weight `w1` by a tiny amount, does the loss go up or down, and by how much?"
+> That's `d(loss)/d(w1)` — the gradient. Micrograd computes it automatically for every weight at once.
+
+**How it works:**
+1. Every number is wrapped in a `Value` object that remembers the operation that created it
+2. Every operation records how to compute the gradient backwards (a `_backward` closure)
+3. `.backward()` walks the chain in reverse — chain rule, automated
+
+**The mountain analogy:**
+> You're lost in fog in the mountains. You can't see the valley (minimum loss). But you can feel whether the ground slopes up or down. The slope = gradient. Walking downhill = gradient descent. Micrograd = the instrument that measures the slope.
+
+**In one line:**
+> Micrograd is the algorithm that lets a neural network learn — stripped to 150 lines so you can understand it completely. Every framework (PyTorch, JAX, TensorFlow) does this same thing, just at massive scale.
+
+---
+
+## Next Steps
+
+- [ ] Complete micrograd homework exercises above
+- [ ] Watch Karpathy's GPT video (Week 3)
+- [ ] Build Transformer from scratch
+- [ ] Build ReAct Agent loop
+
+---
+
+*Run micrograd lessons:*
+```bash
+cd micrograd
+$env:PYTHONIOENCODING='utf-8'
+python step1_just_values.py
+python step2_one_neuron.py
+python step3_full_network.py
+```
