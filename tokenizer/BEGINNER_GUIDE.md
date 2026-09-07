@@ -177,3 +177,5 @@ the model generates text, it outputs token ids — and THIS tokenizer decodes th
 
 > **One sentence to remember:** *A tokenizer is a learned dictionary that compresses text into
 > meaningful numbers — built by nothing more than counting pairs and gluing the winners.*
+
+<!-- auto-sync test: 22:17:45 -->
