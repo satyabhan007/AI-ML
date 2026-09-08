@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Run real-world scenarios tester (12 tests)
+      - name: Run layer + scenario tester (46 checks)
         run: python lab/scenarios_tester.py
 
       - name: Run micrograd lessons (regression check)
@@ -32,3 +32,9 @@ jobs:
           python tokenizer/step1_why_tokenize.py
           python tokenizer/step2_train_bpe.py
           python tokenizer/step3_encode_decode.py
+
+      - name: Run attention lessons (regression check)
+        run: |
+          python attention/step1_similarity.py
+          python attention/step2_self_attention.py
+          python attention/step3_mini_transformer.py

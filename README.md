@@ -34,43 +34,49 @@ AI-ML/
 │   ├── step3_encode_decode.py# Encoding text to token IDs and roundtrip decoding
 │   └── BEGINNER_GUIDE.md    # The Amateur's Guide to Tokenizers with diagrams
 │
+├── attention/               # Phase 4: Attention & the Transformer Heart
+│   ├── attention.py         # softmax · √d scaling · causal mask · positional encoding
+│   ├── step1_similarity.py  # Dot product & cosine similarity: the "relevance meter"
+│   ├── step2_self_attention.py # Queries/keys/values: pronouns resolved by attention
+│   ├── step3_mini_transformer.py # Embeddings + PE + causal attention, trained end-to-end
+│   └── BEGINNER_GUIDE.md    # Everyday analogies for attention, temperature & O(n²)
+│
 └── lab/                     # Interactive Playground & Real-World Scenarios
-    ├── playground.html      # Self-contained browser GUI: visual neuron & tokenizer
-    └── scenarios_tester.py  # 5 end-to-end tests: umbrella, spam, housing, billing, autograd
+    ├── playground.html      # Browser GUI: 6 live labs (neuron, trainer, tokenizer, attention, temperature, O(n²))
+    └── scenarios_tester.py  # 46 automated checks: layer-by-layer unit tests + 15 real-world scenarios
 ```
 
 ---
 
 ## ⚡ Quick Start
 
-### 1. Run the Real-World Scenarios Tester (100% PASS)
-Tests everything built across Phase 1 and Phase 2 against 5 realistic scenarios:
+### 1. Run the Lab Tester (46/46 PASS)
+Two kinds of checks — every **layer** unit-tested, then 15 real-world **scenarios**:
 ```bash
 cd lab
 python scenarios_tester.py
 ```
-- **Scenario 1 (☂ Umbrella decision):** Frozen neuron evaluating weather signals
-- **Scenario 2 (📧 Spam filter):** MLP trained on emails classifying unseen messages
-- **Scenario 3 (🏠 House price estimate):** Regression network predicting home values
-- **Scenario 4 (💬 Chat API billing):** BPE token counts calculating LLM API costs
-- **Scenario 5 (🔬 Autograd unit test):** Analytical gradients verified against numerical nudges ($\Delta < 10^{-10}$)
+- **Part 1 · Layer-by-layer unit tests:** every engine op's gradient vs numerical differentiation · Neuron/Layer/MLP anatomy (41 params) · a fresh MLP trains to 100% · BPE roundtrips + byte fallback · softmax, temperature, √d scaling, causal mask, positional encoding
+- **Part 2 · Real-world scenarios:** ☂ umbrella · 📧 spam on UNSEEN mail · 🏠 house prices · 💬 API billing · 🔬 autograd unit test · 🌡 temperature sampling · 👤 pronoun resolution · 📈 O(n²) cost · 🎭 causal-mask proof · 🤖 mini transformer trained end-to-end
 
 ### 2. Launch the Interactive Browser Lab
-Open `lab/playground.html` in any browser (or double click it) for:
-- Live visual neuron with interactive weight/bias sliders and activation curves
-- Live BPE tokenizer inspector: type text, see tokens highlighted, inspect compression ratios
+Open `lab/playground.html` in any browser (or double click it) — **6 live labs**, zero install:
+- ☂ Umbrella neuron sliders · 🏋 Train-a-network LIVE (loss chart + accuracy table)
+- 🔢 BPE tokenizer chips + 💰 API cost calculator
+- 👀 Attention visualizer (pronoun resolution) · 🌡 Temperature explorer · 🧮 O(n²) context cost
 
-### 3. Train the Tokenizer from Scratch
+### 3. Walk the Attention Chapter (Phase 4)
 ```bash
-cd tokenizer
-python step2_train_bpe.py
-python step3_encode_decode.py
+cd attention
+python step1_similarity.py
+python step2_self_attention.py
+python step3_mini_transformer.py
 ```
 
-### 4. Train the Neural Network from Scratch
+### 4. Train the Classics
 ```bash
-cd micrograd
-python step3_full_network.py
+cd tokenizer && python step2_train_bpe.py && python step3_encode_decode.py
+cd ..\micrograd && python step3_full_network.py
 ```
 
 ---
@@ -85,6 +91,8 @@ python step3_full_network.py
 | [`micrograd/MINDMAPS.md`](micrograd/MINDMAPS.md) | Conceptual Maps | Memory aids and system maps for rapid revision |
 | [`tokenizer/BEGINNER_GUIDE.md`](tokenizer/BEGINNER_GUIDE.md) | BPE Tokenization | How raw bytes turn into tokens, compression ratios, and UTF-8 handling |
 | [`micrograd/AI_ENGINEERING_NOTES.md`](micrograd/AI_ENGINEERING_NOTES.md) | Roadmap | The journey from autograd to LLMs and AI Agents |
+| [`attention/attention.py`](attention/attention.py) | Attention Core | Softmax, √d scaling, causal masks, positional encoding — pure Python |
+| [`attention/BEGINNER_GUIDE.md`](attention/BEGINNER_GUIDE.md) | Transformers 101 | Everyday analogies for queries, keys, values — and the O(n²) bill |
 
 ---
 
