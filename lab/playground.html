@@ -349,7 +349,7 @@
                     </div>
                 </div>
                 <div class="sc"><b>🏠 House price estimate</b>MSE regression: size/location → price. Zillow-style
-                    estimators start here.<div class="where">→ scenarios_tester.py #7</div>
+                    estimators start here.<div class="where">→ scenarios_tester.py #8</div>
                 </div>
                 <div class="sc"><b>☂ Rule-of-thumb apps</b>Frozen-weight neuron = any instant yes/no decision (umbrella,
                     outfit, cancel subscription?).<div class="where">→ Scenario 1 (live)</div>
@@ -516,65 +516,6 @@
         }
         function dotJS(a, b) { let s = 0; for (let i = 0; i < a.length; i++) s += a[i] * b[i]; return s; }
 
-        /* ════════════ SCENARIO 4: attention visualizer ════════════ */
-        const ATT_SENT = ['the', 'animal', "didn't", 'cross', 'the', 'street', 'because', 'it'];
-        const ATT_EMB = [[0.0, 0, 0, 0], [0.9, 0, 0, 0.2], [0.1, 0.8, 0, 0], [0.2, 0.9, 0.3, 0],
-                         [0.0, 0, 0, 0], [0, 0, 0.9, 0], [0, 0.4, 0, 0], [0.85, 0, 0, 0.4]];
-        const IT_TIRED = [0.7, 0, 0, 0.8], IT_WIDE = [0, 0, 0.8, 0.5];
-        function renderAttention(kind) {
-            const embs = ATT_EMB.concat(kind === 'tired' ? [IT_TIRED] : [IT_WIDE]);
-            const scores = embs.map(k => dotJS(embs[8], k) / 2);   // √d with d=4 → divide by 2
-            const w = softmaxJS(scores);
-            const words = ATT_SENT.concat(['it']);
-            let out = '"it" attends to every word (softmax weights):\n';
-            words.forEach((word, j) => {
-                out += `  ${word.padEnd(8)} ▐${'█'.repeat(Math.round(w[j] * 40))}▌ ${(w[j] * 100).toFixed(1)}%\n`;
-            });
-            const top = w.indexOf(Math.max(...w));
-            out += `→ the attention head resolves "it" = ${words[top].toUpperCase()}`
-                + (kind === 'tired' ? '   (tired-sense: the ANIMAL was tired)' : '   (wide-sense: the STREET was wide)');
-            attOut.textContent = out;
-        }
-        document.getElementById('attTired').onclick = () => renderAttention('tired');
-        document.getElementById('attWide').onclick = () => renderAttention('wide');
-
-        /* ════════════ SCENARIO 5: temperature explorer ════════════ */
-        const CAND = [['mat', 0.70], ['sofa', 0.12], ['floor', 0.08], ['roof', 0.05], ['moon', 0.05]];
-        function renderTemp() {
-            const T = +tempSlider.value;
-            tempV.textContent = T.toFixed(2);
-            const logits = CAND.map(c => Math.log(c[1]));
-            const p = softmaxJS(logits, T);
-            let bars = 'p(next word | "The cat sat on the ___") — after temperature:\n';
-            CAND.forEach((c, i) => {
-                bars += `  ${c[0].padEnd(6)} ▐${'█'.repeat(Math.round(p[i] * 36)).padEnd(36, '░')}▌ ${(p[i] * 100).toFixed(1).padStart(5)}%\n`;
-            });
-            tempOut.textContent = bars;
-            const picks = [];
-            for (let k = 0; k < 10; k++) {
-                let r = Math.random(), acc = 0, pick = CAND[CAND.length - 1][0];
-                for (let i = 0; i < CAND.length; i++) { acc += p[i]; if (r <= acc) { pick = CAND[i][0]; break; } }
-                picks.push(pick);
-            }
-            tempSample.textContent = '10 sampled continuations:  ' + picks.join(' · ');
-        }
-        tempSlider.oninput = renderTemp;
-        renderTemp();
-
-        /* ════════════ SCENARIO 6: context cost O(n²) ════════════ */
-        function renderCtx() {
-            const n = +ctxSlider.value;
-            ctxV.textContent = n.toLocaleString();
-            const pairs = n * n;
-            ctxOut.textContent =
-                `every token scores every token →  ${n.toLocaleString()}² = ${pairs.toLocaleString()} pairwise scores\n`
-                + `at GPT-4o-mini input rates ($0.15/1M tokens): ≈ $${(pairs * 0.15e-6).toFixed(6)} in attention scores alone\n`
-                + `vs 1,024 tokens: ${(pairs / (1024 * 1024)).toFixed(1)}× the compute  ·  doubling context = 4× cost\n`
-                + `this quadratic wall is exactly why Flash Attention and KV caches exist`;
-        }
-        ctxSlider.oninput = renderCtx;
-        renderCtx();
-
         function countPairs(ids) {
             const m = new Map();
             for (let i = 0; i < ids.length - 1; i++) { const p = ids[i] + ',' + ids[i + 1]; m.set(p, (m.get(p) || 0) + 1); } return m;
@@ -649,6 +590,97 @@ that's ≈ ${Math.ceil(1e6 / Math.max(ids.length, 1)).toLocaleString()} messages
         }
         document.getElementById('trainTok').onclick = trainTok;
         document.getElementById('vs').oninput = e => vsV.textContent = e.target.value;
+        /* ═══════════════ SCENARIO 4: attention visualizer ═══════════════ */
+        const ATT_TOKENS = ['the', 'animal', "didn't", 'cross', 'the', 'street', 'because', 'it'];
+        const ATT_EMB = {
+            'the':     [0.0, 0.0, 0.0, 0.0],
+            'animal':  [0.9, 0.0, 0.0, 0.2],
+            "didn't":  [0.1, 0.8, 0.0, 0.0],
+            'cross':   [0.2, 0.9, 0.3, 0.0],
+            'street':  [0.0, 0.0, 0.9, 0.0],
+            'because': [0.0, 0.4, 0.0, 0.0],
+            'it':      [0.0, 0.0, 0.0, 0.0],
+        };
+        function softmaxJS(scores, T = 1.0) {
+            const m = Math.max(...scores);
+            const exps = scores.map(s => Math.exp((s - m) / T));
+            const sum = exps.reduce((a, b) => a + b, 0);
+            return exps.map(e => e / sum);
+        }
+        function scaleDot(q, keys) {
+            return keys.map(k => k.reduce((a, x, i) => a + x * q[i], 0) / Math.sqrt(q.length));
+        }
+        function attWeights(qEmb, keys, T = 1.0) { return softmaxJS(scaleDot(qEmb, keys), T); }
+        function barRow(label, w, color) {
+            return `<div style="display:flex;align-items:center;gap:6px;margin:2px 0">
+                <span style="width:70px;font-family:Consolas,monospace">${label}</span>
+                <div style="flex:1;background:#0b1220;border-radius:6px;overflow:hidden">
+                    <div style="width:${(w * 100).toFixed(1)}%;background:${color};height:14px"></div>
+                </div>
+                <span style="width:52px;text-align:right;font-family:Consolas,monospace">${(w * 100).toFixed(1)}%</span>
+            </div>`;
+        }
+        function renderAttention(kind) {
+            const it = kind === 'tired' ? [0.7, 0.0, 0.0, 0.8] : [0.0, 0.0, 0.8, 0.5];
+            const tokens = [...ATT_TOKENS, kind === 'tired' ? 'tired' : 'wide'];
+            const keys = tokens.map(t => ATT_EMB[t]);
+            const w = attWeights(it, keys);
+            const aW = w[tokens.indexOf('animal')], sW = w[tokens.indexOf('street')];
+            const win = aW > sW ? 'ANIMAL 🐫' : 'STREET 🛣️';
+            const verdict = (aW > sW) === (kind === 'tired') ? '✅ resolves CORRECTLY' : '❌ resolves WRONG';
+            let html = `<b>"it" = ${win}</b> ${verdict}`;
+            tokens.forEach((t, i) => {
+                html += barRow(t, w[i],
+                    i === tokens.indexOf('animal') ? 'var(--ok)' :
+                    i === tokens.indexOf('street') ? 'var(--bad)' : 'var(--acc)');
+            });
+            attOut.innerHTML = html;
+        }
+        document.getElementById('attTired').onclick = () => renderAttention('tired');
+        document.getElementById('attWide').onclick = () => renderAttention('wide');
+
+        /* ═══════════════ SCENARIO 5: temperature explorer ═══════════════ */
+        const TEMP_WORDS = ['mat', 'floor', 'moon', 'keyboard', 'chair'];
+        const TEMP_LOGITS = [3.2, 2.1, 1.0, 0.2, -0.6];
+        function renderTemp() {
+            const T = +document.getElementById('tempSlider').value;
+            document.getElementById('tempV').textContent = T.toFixed(2);
+            const p = softmaxJS(TEMP_LOGITS, T);
+            let html = '';
+            TEMP_WORDS.forEach((w, i) => { html += barRow(w, p[i], 'var(--acc)'); });
+            tempOut.innerHTML = html;
+            const idxs = [];
+            for (let k = 0; k < 10; k++) {
+                let r = Math.random(), acc = 0, pick = TEMP_WORDS.length - 1;
+                for (let i = 0; i < p.length; i++) { acc += p[i]; if (r <= acc) { pick = i; break; } }
+                idxs.push(pick);
+            }
+            const sample = idxs.map(i => TEMP_WORDS[i]).join(' · ');
+            const distinct = new Set(idxs).size;
+            tempSample.innerHTML = `🎲 10 next-word samples: <b>${sample}</b>\n` +
+                `${distinct}/10 distinct · top word ${(idxs.filter(i => i === idxs[0]).length / 10 * 100).toFixed(0)}% · ` +
+                (T < 0.5 ? 'frozen — same answer every time (production/analysis mode)' :
+                 T > 2 ? 'chaotic — creative but often nonsense' :
+                 'balanced — the usual chat setting');
+        }
+        document.getElementById('tempSlider').oninput = renderTemp;
+
+        /* ═══════════════ SCENARIO 6: context cost O(n²) ═══════════════ */
+        function renderCtx() {
+            const n = +document.getElementById('ctxSlider').value;
+            document.getElementById('ctxV').textContent = n.toLocaleString();
+            const pairs = n * n;
+            ctxOut.innerHTML =
+                `pairwise scores to compute: <b>${pairs.toLocaleString()}</b>\n` +
+                `double the context ⇒ 4× the compute (quadratic).\n` +
+                `GPT-4's 128k context = ${(128000 ** 2).toLocaleString()} scores per head, per layer —\n` +
+                `that's why Flash Attention and KV caches exist.`;
+        }
+        document.getElementById('ctxSlider').oninput = renderCtx;
+
+        renderAttention('tired');
+        renderTemp();
+        renderCtx();
         renderTokens();
 
         /* ══════════ SCENARIO 4: ATTENTION VISUALIZER ══════════ */

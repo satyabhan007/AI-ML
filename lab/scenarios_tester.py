@@ -322,7 +322,7 @@ print(f"  {PASS if passed else FAIL} f(x)=3x²+2x+1 at x=1.7")
 print(f"        engine says  df/dx = {analytical:.6f}")
 print(f"        nudge method df/dx = {numerical:.6f}")
 print(f"        |difference| = {diff:.2e}  (target < 1e-3)")
-record("🔬 autograd check", int(passed), 1)
+record("🔬 autograd unit", int(passed), 1)
 # ── SCENARIO 11 — 🌡 TEMPERATURE SAMPLING (the creativity dial) ──────
 print("\n— 11 · temperature sampling — how ChatGPT picks its words —")
 P = [0.70, 0.20, 0.10]                      # model's honest probabilities
