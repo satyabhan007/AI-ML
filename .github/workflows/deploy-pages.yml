@@ -1,8 +1,8 @@
 name: Deploy AI-ML to GitHub Pages
 
 # Deploys the full GitHub Pages site (index.html + static assets + lab playground)
-# from the repository root. After the first successful run, enable Pages:
-# Settings → Pages → Build and deployment → Source: "GitHub Actions"
+# from the repository root. Pages is auto-enabled by configure-pages (enablement: true),
+# so no manual Settings → Pages setup is required.
 
 on:
   push:
@@ -30,6 +30,10 @@ jobs:
 
       - name: Set up Pages
         uses: actions/configure-pages@v5
+        with:
+          # Auto-enable Pages (source: "GitHub Actions") so the first deploy
+          # works without manually flipping Settings → Pages.
+          enablement: true
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
