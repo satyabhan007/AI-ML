@@ -68,7 +68,20 @@ Exit code 0 when everything passes (1 on failure), so you can wire it into CI la
 
 Once this repo is pushed to GitHub, you get both testers **hosted and automated for free**:
 
-### A. The visual playground becomes a live website (GitHub Pages)
+### 3. The visual playground becomes a live website (GitHub Pages)
+
+1. Push the repo (commands below).
+2. On GitHub: **Settings → Pages → Build and deployment → Source: `GitHub Actions`**.
+3. The workflow `.github/workflows/deploy-pages.yml` deploys the entire repository root
+   automatically on every push — your landing page and playground go live at:
+
+   `https://<your-username>.github.io/<repo>/`
+
+   The interactive playground is available at:
+   `https://<your-username>.github.io/<repo>/lab/playground.html`
+
+   Share the link — anyone can drag the umbrella sliders and train your network,
+   no install needed.
 
 1. Push the repo (commands below).
 2. On GitHub: **Settings → Pages → Build and deployment → Source: `GitHub Actions`**.

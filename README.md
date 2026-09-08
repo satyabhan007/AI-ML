@@ -1,4 +1,8 @@
 # AI-ML — From Scratch AI Engineering Curriculum
+[![GitHub Pages](https://img.shields.io/badge/Live%20Site-GitHub%20Pages-252932?logo=githubpages&labelColor=252932&color=3b82f6)](https://satyabhan007.github.io/AI-ML/)
+[![AI Lab Tests](https://github.com/satyabhan007/AI-ML/actions/workflows/lab-tests.yml/badge.svg)](https://github.com/satyabhan007/AI-ML/actions/workflows/lab-tests.yml)
+[![Python 3.13](https://img.shields.io/badge/Python-3.13-3776ab?logo=python&logoColor=white)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 > Hands-on, zero-black-box implementations of modern AI and Machine Learning fundamentals from scratch in pure Python.
 
