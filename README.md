@@ -9,8 +9,9 @@
 > autograd engine to a quantized model served in production — in pure
 > Python, no dependencies.
 
-**Two ways in:**
-- 🌐 **[The AI Engineering Course](https://satyabhan007.github.io/AI-ML/learn/)** — 8 chapters × 5 levels (analogy → expert), with live labs and quizzes.
+**Ways in:**
+- 🌐 **[Course · Part 1 — Fundamentals](https://satyabhan007.github.io/AI-ML/learn/)** — 8 chapters × 5 levels (analogy → expert), built from scratch, with live labs.
+- 📗 **[Course · Part 2 — Applied](https://satyabhan007.github.io/AI-ML/learn2/)** — 15 chapters × 5 levels on shipping LLM systems: structured output, tool calling, context engineering, vector DBs, RAG, reranking, agents, MCP, deterministic pipelines, evals, guardrails, caching, observability, fine-tuning.
 - 🧪 **[The Interactive Playground](https://satyabhan007.github.io/AI-ML/lab/playground.html)** — 6 browser labs, zero install.
 - 📂 Or read the source below, module by module.
 
@@ -29,7 +30,9 @@ AI-ML/
 ├── finetuning/    # 7 · LoRA, Bradley-Terry reward model, DPO — on the micrograd engine (step1–3)
 ├── serving/       # 8 · INT8 quantization, KV-cache, continuous batching, roofline (step1–3)
 │
-├── learn/         # The 8-chapter × 5-level course (static site: index.html + course.js)
+├── learn/         # Course Part 1 — Fundamentals: 8 chapters × 5 levels (static site)
+├── learn2/        # Course Part 2 — Applied: 15 chapters × 5 levels (tool calling, RAG,
+│                  #   agents, MCP, evals, guardrails, caching, observability, fine-tuning, …)
 ├── lab/           # playground.html (6 live labs) + scenarios_tester.py (69 checks)
 └── *.md           # Root explainer guides mirrored from micrograd/ (REPORT, VISUAL_GUIDE, …)
 ```
@@ -96,7 +99,8 @@ python serving/step2_kv_cache.py
 
 ## 🎓 Keep learning
 
-- **[The AI Engineering Course](https://satyabhan007.github.io/AI-ML/learn/)** (this repo) — the eight topics above as a guided 8 × 5 course.
+- **[Course · Part 1](https://satyabhan007.github.io/AI-ML/learn/)** (this repo) — the eight topics above as a guided 8 × 5 course.
+- **[Course · Part 2](https://satyabhan007.github.io/AI-ML/learn2/)** (this repo) — applied AI engineering, 15 × 5: tool calling, context engineering, vector DBs, RAG, reranking, agents, MCP, deterministic pipelines, evals, guardrails, caching, observability, fine-tuning.
 - **[Claude 101](https://academy.claude.com/courses/claude-101)** — Anthropic's introduction to working with Claude.
 - **[Introduction to Claude Cowork](https://academy.claude.com/courses/introduction-to-claude-cowork)** — Anthropic's course on collaborating with Claude on real work.
 
