@@ -3,7 +3,7 @@
    Dark theme matching the existing account_rotator frontend
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+/* NOTE: webfonts load via async <link> in index.html <head> (no @import — render-blocking). */
 
 :root {
     --bg:               #0b0f19;
