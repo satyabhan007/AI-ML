@@ -49,13 +49,13 @@
             </div>
             <nav class="nav-links">
                 <a href="#curriculum">Curriculum</a>
-                <a href="learn/">Course</a>
+                <a href="learn/">Course · P1</a>
+                <a href="learn2/">P2</a>
                 <a href="#playground">Playground</a>
-                <a href="#docs">Documentation</a>
-                <a href="#getting-started">Getting Started</a>
+                <a href="#docs">Docs</a>
             </nav>
             <div class="nav-actions">
-                <a href="learn/" class="btn btn-primary btn-sm">Take the Course</a>
+                <a href="learn/" class="btn btn-primary btn-sm">Course</a>
                 <a href="lab/playground.html" class="btn btn-outline btn-sm">Open Lab</a>
             </div>
         </div>
@@ -71,7 +71,7 @@
                 entirely in pure Python.
             </p>
             <div class="hero-actions">
-                <a href="learn/" class="btn btn-primary">Start the 8-Chapter Course</a>
+                <a href="learn/" class="btn btn-primary">Start the Course — Part 1</a>
                 <a href="lab/playground.html" class="btn btn-outline">Launch Interactive Playground</a>
             </div>
             <div class="badge-row">
@@ -120,13 +120,19 @@
                 <strong>zero-black-box</strong>.
             </p>
             <div class="card" style="margin-bottom:32px;border-left:3px solid #3b82f6;">
-                <div class="card-title">📘 Prefer a guided path?</div>
+                <div class="card-title">📘 Prefer a guided path? Two courses, 23 chapters.</div>
                 <p style="margin:12px 0;color:var(--text-muted);font-size:0.92rem;">
-                    The same eight topics as a structured course — <strong>8 chapters ×
-                    5 levels</strong>, from plain-English analogy to expert view, with
-                    live labs and checkpoint quizzes.
+                    <strong>Part 1 — Fundamentals</strong>: the 8 topics below as
+                    <strong>8 chapters × 5 levels</strong>, analogy to expert view, with live labs.<br>
+                    <strong>Part 2 — Applied</strong>: <strong>15 chapters × 5 levels</strong> on shipping
+                    LLM systems — structured output, tool calling, context engineering, vector DBs, RAG,
+                    reranking, agents, MCP, deterministic pipelines, evals, guardrails, caching,
+                    observability and fine-tuning.
                 </p>
-                <a href="learn/" class="btn btn-sm btn-primary">Open the AI Engineering Course →</a>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <a href="learn/" class="btn btn-sm btn-primary">Part 1 — Fundamentals →</a>
+                    <a href="learn2/" class="btn btn-sm btn-outline">Part 2 — Applied →</a>
+                </div>
             </div>
             <div class="grid-3">
                 <div class="card phase-card" data-phase="Phase 1">
@@ -575,7 +581,7 @@ cd AI-ML</code></pre>
         <div class="container">
             <h2 class="section-title">Keep Learning</h2>
             <p class="section-subtitle">
-                Start with the course built into this repo, then go deeper with
+                Two courses built into this repo, then go deeper with
                 Anthropic's official training.
             </p>
             <div class="grid-3">
@@ -583,15 +589,30 @@ cd AI-ML</code></pre>
                     <div class="card-header">
                         <div class="card-icon">🧠</div>
                         <div>
-                            <div class="card-title">AI Engineering Course</div>
+                            <div class="card-title">Course · Part 1 — Fundamentals</div>
                             <div class="card-meta">This repo · 8 chapters × 5 levels</div>
                         </div>
                     </div>
                     <p style="color:var(--text-muted);font-size:0.9rem;">
                         Autograd → tokenization → GPUs → attention → embeddings →
-                        RAG/agents → RLHF → serving. Analogies, live labs, quizzes.
+                        RAG/agents → RLHF → serving. Built from scratch, with live labs.
                     </p>
-                    <a href="learn/" class="btn btn-sm btn-primary">Open the course</a>
+                    <a href="learn/" class="btn btn-sm btn-primary">Open Part 1</a>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📗</div>
+                        <div>
+                            <div class="card-title">Course · Part 2 — Applied</div>
+                            <div class="card-meta">This repo · 15 chapters × 5 levels</div>
+                        </div>
+                    </div>
+                    <p style="color:var(--text-muted);font-size:0.9rem;">
+                        Structured output, tool calling, context engineering, vector DBs,
+                        RAG, reranking, agents, MCP, deterministic pipelines, evals,
+                        guardrails, caching, observability, fine-tuning.
+                    </p>
+                    <a href="learn2/" class="btn btn-sm btn-primary">Open Part 2</a>
                 </div>
                 <div class="card">
                     <div class="card-header">

@@ -42,9 +42,11 @@
     });
     var tot = totalPct();
     app.innerHTML =
-      '<section class="c-hero"><h1>Learn <span>every layer</span> of AI engineering</h1>' +
-      '<p class="sub">' + CHAPTERS.length + ' chapters take you from "what even is a neural network?" to shipping quantized LLMs — ' +
-      'each in 5 levels (Amateur → Expert), with analogies, the apps you already use, runnable code and a checkpoint quiz.</p>' +
+      '<section class="c-hero"><h1>Part 2 — <span>Ship the system</span></h1>' +
+      '<p class="sub">' + CHAPTERS.length + ' chapters on APPLIED AI engineering: structured output, tool calling, ' +
+      'context engineering, vector search, RAG, reranking, agents, MCP, evals, guardrails, caching, observability and fine-tuning. ' +
+      'Each in 5 levels (Amateur → Expert), heavy on analogies, visual diagrams and real production scenarios. ' +
+      '<a href="../learn/" style="color:var(--cyan)">← Part 1 builds the pieces from scratch</a>.</p>' +
       '<div class="c-meta"><span><b>' + CHAPTERS.length + '</b> chapters</span><span><b>5</b> levels each</span>' +
       '<span><b>' + (CHAPTERS.length * 5) + '</b> lessons</span><span><b>' + (CHAPTERS.length * 3) + '</b> checkpoint questions</span>' +
       '<span><b>0</b> prerequisites</span></div></section>' +
@@ -53,7 +55,7 @@
       (doneAll === CHAPTERS.length ? ' — 🎉 Course complete!' : ' — pick any chapter below') + '</p></div>' +
       '<div class="chgrid">' + cards + '</div>' +
       '<footer class="c-foot"><div class="links">' +
-      '<a href="../">← Main site</a><a href="../learn2/">📗 Part 2</a><a href="../lab/playground.html">🔬 Playground</a>' +
+      '<a href="../">← Main site</a><a href="../learn/">📘 Part 1</a><a href="../lab/playground.html">🔬 Playground</a>' +
       '<a href="https://github.com/satyabhan007/AI-ML" target="_blank" rel="noopener">GitHub</a>' +
       '<a href="https://satyabhan007.github.io/" target="_blank" rel="noopener">Portfolio</a>' +
       '<a href="https://www.linkedin.com/in/satyabhan-bhadoriya-777b28239/" target="_blank" rel="noopener">LinkedIn</a></div>' +
@@ -109,7 +111,7 @@
       '<button id="nextLv"' + (curLv === 5 ? ' disabled' : '') + '>' + (curLv === 4 ? 'Final level →' : 'Next level →') + '</button></div></section>' +
       quizHtml +
       '<footer class="c-foot"><div class="links">' +
-      '<a href="#/">← All chapters</a><a href="../learn2/">📗 Part 2</a><a href="../lab/playground.html">🔬 Playground</a>' +
+      '<a href="#/">← All chapters</a><a href="../lab/playground.html">🔬 Playground</a>' +
       '<a href="https://github.com/satyabhan007/AI-ML" target="_blank" rel="noopener">GitHub</a>' +
       '<a href="https://www.linkedin.com/in/satyabhan-bhadoriya-777b28239/" target="_blank" rel="noopener">LinkedIn</a></div></footer>';
 
