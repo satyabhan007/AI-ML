@@ -1,7 +1,7 @@
 """
 lab/scenarios_tester.py
 =======================
-AI LAB TESTER v2 — two kinds of checks, 52 total:
+AI LAB TESTER v3 — two kinds of checks:
 
   PART 1 · LAYER-BY-LAYER UNIT TESTS (is every building block correct?)
      1. autograd engine  — every op's gradient vs numerical differentiation
@@ -10,13 +10,15 @@ AI LAB TESTER v2 — two kinds of checks, 52 total:
      4. tokenizer        — BPE roundtrips, compression, multi-byte tokens
      5. attention        — softmax, temperature, √d scaling, causal mask, positions
      6. matmul           — naive/tiled/Strassen agree, n³ flops, matvec = attention
+     7. embeddings       — cosine, king−man+woman, LSH nearest-neighbour recall
+     8. rag              — retrieval routing, grounding + citation, refusal, safe tools
+     9. finetuning       — sigmoid, Bradley-Terry loss, LoRA patch, a short fit
+    10. serving          — INT8 quantization, KV-cache O(n), continuous batching
 
   PART 2 · REAL-WORLD SCENARIOS (do the blocks solve actual problems?)
-     7.  ☂  umbrella decision        12. 🌡 temperature sampling
-     8.  📧 spam filter              13. 👤 pronoun resolution
-     9.  🏠 house price estimate     14. 📈 attention is O(n²)
-     10. 💬 chat API billing         15. 🎭 causal mask proof
-     11. 🔬 autograd unit test       16. 🤖 mini transformer end-to-end
+     ☂ umbrella · 📧 spam · 🏠 house price · 💬 API billing · 🔬 autograd unit ·
+     🌡 temperature · 👤 pronoun resolution · 📈 O(n²) · 🎭 causal mask ·
+     🤖 mini transformer end-to-end
 Run:  python scenarios_tester.py
 Exit code 0 = all pass, 1 = something failed (CI-friendly).
 """
@@ -28,10 +30,9 @@ if hasattr(sys.stderr, 'reconfigure'):
     sys.stderr.reconfigure(encoding='utf-8')
 
 HERE = os.path.dirname(__file__)
-sys.path.insert(0, os.path.join(HERE, '..', 'micrograd'))
-sys.path.insert(0, os.path.join(HERE, '..', 'tokenizer'))
-sys.path.insert(0, os.path.join(HERE, '..', 'attention'))
-sys.path.insert(0, os.path.join(HERE, '..', 'matmul'))
+for _pkg in ('micrograd', 'tokenizer', 'attention', 'matmul',
+             'embeddings', 'rag', 'finetuning', 'serving'):
+    sys.path.insert(0, os.path.join(HERE, '..', _pkg))
 
 from engine import Value                     # noqa: E402
 from nn import Neuron, Layer, MLP            # noqa: E402
@@ -43,6 +44,10 @@ from attention import (                      # noqa: E402
 from matmul import (                         # noqa: E402
     naive, tiled, strassen, matvec, transpose, count_flops, strassen_muls,
 )
+import embeddings as emb_mod                 # noqa: E402
+import rag as rag_mod                        # noqa: E402
+import finetuning as ft_mod                  # noqa: E402
+import serving as srv_mod                    # noqa: E402
 
 random.seed(42)
 PASS, FAIL = "[PASS]", "[FAIL]"
@@ -75,8 +80,9 @@ def check(label, ok, detail=""):
 
 
 print("╔" + "═" * 60 + "╗")
-print("║" + "  AI LAB TESTER v2 — LAYERS + REAL-WORLD SCENARIOS".center(60) + "║")
-print("║" + "  micrograd · nn · BPE · attention · matmul — 52 checks".center(60) + "║")
+print("║" + "  AI LAB TESTER v3 — LAYERS + REAL-WORLD SCENARIOS".center(60) + "║")
+print("║" + "  engine · nn · BPE · attention · matmul · embeddings".center(60) + "║")
+print("║" + "  · rag · finetuning · serving".center(60) + "║")
 print("╚" + "═" * 60 + "╝")
 
 # ══════════════════════════════════════════════════════════════════════
@@ -232,6 +238,99 @@ x = [1, 0, -1]
 ok += check(f"matvec([[1,2,3],[4,5,6]], [1,0,-1]) = [-2, -2]",
             matvec(M, x) == [-2.0, -2.0], f"got {matvec(M, x)}")
 record("🧮 matmul", ok, 6)
+
+# ── LAYER 7 · embeddings: cosine, analogy arithmetic, LSH recall ─────
+print("\n— 7 · embeddings — cosine · king-man+woman · LSH nearest neighbour —")
+ok = 0
+WV = {w: emb_mod.normalize(v) for w, v in {
+    "king": [0.95, 0.05, 0.9, 0.0], "queen": [0.95, 0.95, 0.9, 0.0],
+    "man": [0.10, 0.05, 0.9, 0.0], "woman": [0.10, 0.95, 0.9, 0.0],
+    "dog": [0.0, 0.4, 0.0, 0.95]}.items()}
+ok += check("cosine: king closer to queen than to dog",
+            emb_mod.cosine(WV["king"], WV["queen"]) > emb_mod.cosine(WV["king"], WV["dog"]))
+ok += check("analogy: man→king as woman→queen",
+            emb_mod.analogy("man", "king", "woman", WV)[0][0] == "queen")
+import random as _r7
+_r7.seed(1)
+_cent = [[_r7.gauss(0, 1) for _ in range(16)] for _ in range(8)]
+_items = {f"v{i}": emb_mod.normalize([x + _r7.gauss(0, 0.3) for x in _cent[i % 8]])
+          for i in range(200)}
+_lsh = emb_mod.LSHIndex(16, bits=8, seed=2)
+for _n, _v in _items.items():
+    _lsh.add(_n, _v)
+_q = _items["v0"]
+_ex = emb_mod.nearest(_q, _items, k=5)
+_ap, _nc = _lsh.query(_q, k=5, probe=2)
+ok += check(f"LSH recall@5 ≥ 0.6 while scoring < half the set ({_nc}/200)",
+            emb_mod.recall_at_k(_ex, _ap, 5) >= 0.6 and _nc < 100)
+record("🧭 embeddings", ok, 3)
+
+# ── LAYER 8 · rag: retrieval routing, grounding, refusal, tool safety ─
+print("\n— 8 · rag — retrieve → ground → cite, refuse OOS, safe tools —")
+ok = 0
+_ret = rag_mod.Retriever()
+_ret.add("tok", "Byte pair encoding merges frequent pairs; fewer tokens means a lower bill.")
+_ret.add("attn", "Attention has quadratic time complexity in the sequence length.")
+_ret.add("hist", "The Transformer was introduced in the year 2017. GPT-3 was released in the year 2020.")
+_a = rag_mod.rag_answer("What is the time complexity of attention?", _ret, k=2)
+ok += check("routes question to the right document",
+            _a["retrieved"][0].startswith("attn") and _a["grounded"])
+_oos = rag_mod.rag_answer("What is the capital of France?", _ret, k=2)
+ok += check("refuses an out-of-scope question", _oos["grounded"] is False)
+ok += check("calc tool evaluates arithmetic", rag_mod.calc("2 ** 5 + 1") == 33)
+_safe = False
+try:
+    rag_mod.calc("__import__('os').listdir('.')")
+except ValueError:
+    _safe = True
+ok += check("calc tool rejects non-arithmetic (no eval)", _safe)
+_ag = rag_mod.Agent(_ret).run(
+    "calc{ lookup{year GPT-3 was released} - lookup{year the Transformer was introduced} }")
+ok += check("agent chains lookup + lookup + calc → 3",
+            _ag["answer"] == 3 and
+            sum(k == "Action" for k, _ in _ag["trace"]) == 3)
+record("🔗 rag", ok, 5)
+
+# ── LAYER 9 · finetuning: sigmoid, preference loss, LoRA, a short fit ─
+print("\n— 9 · finetuning — sigmoid · Bradley-Terry loss · LoRA patch —")
+ok = 0
+ok += check("sigmoid(0) == 0.5", abs(ft_mod.sigmoid(0.0).data - 0.5) < 1e-9)
+ok += check("BT loss lower when chosen ≫ rejected",
+            ft_mod.bt_loss(Value(4.0), Value(0.0)).data <
+            ft_mod.bt_loss(Value(0.0), Value(4.0)).data)
+_lora = ft_mod.LoRALinear(4, 4, rank=1, base_W=[[0.3]*4 for _ in range(4)], seed=0)
+ok += check(f"LoRA rank-1 trains {_lora.n_trainable()} weights vs "
+            f"{_lora.n_full_finetune()} for a full fine-tune",
+            _lora.n_trainable() < _lora.n_full_finetune())
+_xs = [[0.2, -0.4, 0.6, -0.1], [-0.3, 0.5, -0.2, 0.4], [0.1, 0.1, -0.5, 0.3]]
+_tgt = [[sum(v) + 0.5 * v[0]] for v in _xs]
+_l2 = ft_mod.LoRALinear(4, 1, rank=1, base_W=[[1.0, 1.0, 1.0, 1.0]], seed=1, a_scale=1.0)
+_h = ft_mod.sgd(_l2.parameters(),
+                lambda: ft_mod.mse([_l2(x)[0] for x in _xs], [t[0] for t in _tgt]),
+                steps=120, lr=0.2)
+ok += check(f"a 120-step LoRA fit reduces loss ({_h[0]:.3f} → {_h[-1]:.3f})",
+            _h[-1] < _h[0] * 0.5)
+record("🎓 finetuning", ok, 4)
+
+# ── LAYER 10 · serving: quantization, KV-cache, batching, roofline ───
+print("\n— 10 · serving — INT8 quant · KV-cache O(n) · continuous batching —")
+ok = 0
+_w = [__import__('math').sin(i / 5) * (1 + i % 7) for i in range(96)]
+_pt = srv_mod.quantize(_w, bits=8)
+ok += check("INT8 quant round-trips within 1% of the value range",
+            srv_mod.rmse(_w, srv_mod.dequantize(_pt)) < 0.01 * (max(_w) - min(_w)))
+ok += check("INT8 is 4× smaller than FP32",
+            srv_mod.bytes_for(96, 32) / srv_mod.bytes_for(96, 8) == 4)
+_c = srv_mod.generate_cost(128, 64, 256)
+ok += check(f"KV-cache gives a big decode speed-up ({_c['speedup']:.0f}×)",
+            _c["speedup"] > 8)
+_st = srv_mod.batching_sim([100, 5, 8, 90, 6, 4, 70, 7], slots=4, mode="static")
+_co = srv_mod.batching_sim([100, 5, 8, 90, 6, 4, 70, 7], slots=4, mode="continuous")
+ok += check(f"continuous batching beats static ({_st['steps']}→{_co['steps']} steps)",
+            _co["steps"] < _st["steps"] and _co["utilisation"] > _st["utilisation"])
+ok += check("roofline flags single-token decode as memory-bound",
+            srv_mod.roofline(2e9, 4e9, 300e12, 2e12)["bound"] == "memory")
+record("🚀 serving", ok, 5)
 
 # ══════════════════════════════════════════════════════════════════════
 # PART 2 · REAL-WORLD SCENARIOS
@@ -519,14 +618,15 @@ def scoreblock(title, rows):
     return p_all, t_all
 
 
-p1, t1 = scoreblock("  PART 1 · LAYER-BY-LAYER UNIT TESTS", results[:6])
-p2, t2 = scoreblock("  PART 2 · REAL-WORLD SCENARIOS", results[6:])
+p1, t1 = scoreblock("  PART 1 · LAYER-BY-LAYER UNIT TESTS", results[:10])
+p2, t2 = scoreblock("  PART 2 · REAL-WORLD SCENARIOS", results[10:])
 total_p, total_t = p1 + p2, t1 + t2
 pct = 100 * total_p / total_t
 print(f"\n  TOTAL: {total_p}/{total_t}  [{bar(pct)}] {pct:.0f}%")
 if total_p == total_t:
     print("\n  ✅ ALL SYSTEMS GO — every layer verified, every scenario solved.")
-    print("     engine → nn → tokenizer → attention → matmul → real products. Foundation complete!")
+    print("     engine → tokenizer → matmul → attention → embeddings → rag →")
+    print("     finetuning → serving.  Scratch to shipped, no black boxes.")
     sys.exit(0)
 else:
     print("\n  ❌ FAILURES FOUND — re-read the failing check above.")

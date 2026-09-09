@@ -49,11 +49,13 @@
             </div>
             <nav class="nav-links">
                 <a href="#curriculum">Curriculum</a>
+                <a href="learn/">Course</a>
                 <a href="#playground">Playground</a>
                 <a href="#docs">Documentation</a>
                 <a href="#getting-started">Getting Started</a>
             </nav>
             <div class="nav-actions">
+                <a href="learn/" class="btn btn-primary btn-sm">Take the Course</a>
                 <a href="lab/playground.html" class="btn btn-outline btn-sm">Open Lab</a>
             </div>
         </div>
@@ -69,11 +71,11 @@
                 entirely in pure Python.
             </p>
             <div class="hero-actions">
-                <a href="lab/playground.html" class="btn btn-primary">Launch Interactive Playground</a>
-                <a href="#getting-started" class="btn btn-outline">Quick Start Guide</a>
+                <a href="learn/" class="btn btn-primary">Start the 8-Chapter Course</a>
+                <a href="lab/playground.html" class="btn btn-outline">Launch Interactive Playground</a>
             </div>
             <div class="badge-row">
-                <span class="badge badge-green">✅ 52/52 Tests Passing</span>
+                <span class="badge badge-green">✅ 69/69 Tests Passing</span>
                 <span class="badge badge-primary">🐍 Pure Python 3.13</span>
                 <span class="badge badge-purple">⚡ Zero Dependencies</span>
             </div>
@@ -89,11 +91,11 @@
         <div class="container">
             <div class="stats-bar">
                 <div class="stat-item">
-                    <div class="stat-value">5</div>
-                    <div class="stat-label">Learning Phases</div>
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Course Modules</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value">52</div>
+                    <div class="stat-value">69</div>
                     <div class="stat-label">Automated Checks</div>
                 </div>
                 <div class="stat-item">
@@ -101,7 +103,7 @@
                     <div class="stat-label">Test Pass Rate</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value">7</div>
+                    <div class="stat-value">6</div>
                     <div class="stat-label">Live Browser Labs</div>
                 </div>
             </div>
@@ -111,11 +113,21 @@
     <!-- Curriculum -->
     <section class="section reveal" id="curriculum">
         <div class="container">
-            <h2 class="section-title">Five Phases, One Full Stack</h2>
+            <h2 class="section-title">Eight Modules, One Full Stack</h2>
             <p class="section-subtitle">
-                Each phase builds on the previous one — from the math inside a single neuron
-                to production-ready AI concepts. All code is <strong>zero-black-box</strong>.
+                Each module builds on the previous one — from the math inside a single
+                neuron to a quantized model served in production. All code is
+                <strong>zero-black-box</strong>.
             </p>
+            <div class="card" style="margin-bottom:32px;border-left:3px solid #3b82f6;">
+                <div class="card-title">📘 Prefer a guided path?</div>
+                <p style="margin:12px 0;color:var(--text-muted);font-size:0.92rem;">
+                    The same eight topics as a structured course — <strong>8 chapters ×
+                    5 levels</strong>, from plain-English analogy to expert view, with
+                    live labs and checkpoint quizzes.
+                </p>
+                <a href="learn/" class="btn btn-sm btn-primary">Open the AI Engineering Course →</a>
+            </div>
             <div class="grid-3">
                 <div class="card phase-card" data-phase="Phase 1">
                     <div style="display:flex;gap:16px;align-items:flex-start;">
@@ -216,6 +228,94 @@
                     <a href="matmul/BEGINNER_GUIDE.md" class="btn btn-sm btn-ghost">Guide</a>
                 </div>
      </div>
+
+                <div class="card phase-card" data-phase="Phase 6">
+                    <div style="display:flex;gap:16px;align-items:flex-start;">
+                        <div class="phase-number">6</div>
+                        <div>
+                            <div class="card-title">Embeddings & Vector Search</div>
+                            <div class="card-meta">Cosine • Word2Vec • LSH / ANN</div>
+                        </div>
+                    </div>
+                    <p style="margin:20px 0;color:var(--text-muted);font-size:0.9rem;">
+                        Meaning as geometry. Show <em>king − man + woman ≈ queen</em>,
+                        learn word vectors from scratch with skip-gram, then build a
+                        locality-sensitive hash that keeps ~90% recall while scoring
+                        9× fewer vectors — the trick inside FAISS.
+                    </p>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <a href="embeddings/step1_meaning_as_geometry.py" class="btn btn-sm btn-outline">Step 1</a>
+                        <a href="embeddings/step2_learn_word_vectors.py" class="btn btn-sm btn-outline">Step 2</a>
+                        <a href="embeddings/step3_vector_search.py" class="btn btn-sm btn-outline">Step 3</a>
+                        <a href="embeddings/BEGINNER_GUIDE.md" class="btn btn-sm btn-ghost">Guide</a>
+                    </div>
+                </div>
+
+                <div class="card phase-card" data-phase="Phase 7">
+                    <div style="display:flex;gap:16px;align-items:flex-start;">
+                        <div class="phase-number">7</div>
+                        <div>
+                            <div class="card-title">Prompting, RAG & Agents</div>
+                            <div class="card-meta">Templates • Retrieval • ReAct loop</div>
+                        </div>
+                    </div>
+                    <p style="margin:20px 0;color:var(--text-muted);font-size:0.9rem;">
+                        Everything around the model. Five prompt templates measured
+                        head-to-head, a mini-RAG that retrieves, grounds and cites (and
+                        refuses when it should), then a ReAct agent chaining lookup +
+                        calc tools with a full trace.
+                    </p>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <a href="rag/step1_prompting.py" class="btn btn-sm btn-outline">Step 1</a>
+                        <a href="rag/step2_mini_rag.py" class="btn btn-sm btn-outline">Step 2</a>
+                        <a href="rag/step3_agent_loop.py" class="btn btn-sm btn-outline">Step 3</a>
+                        <a href="rag/BEGINNER_GUIDE.md" class="btn btn-sm btn-ghost">Guide</a>
+                    </div>
+                </div>
+
+                <div class="card phase-card" data-phase="Phase 8">
+                    <div style="display:flex;gap:16px;align-items:flex-start;">
+                        <div class="phase-number">8</div>
+                        <div>
+                            <div class="card-title">Fine-tuning & RLHF</div>
+                            <div class="card-meta">LoRA • Reward model • DPO</div>
+                        </div>
+                    </div>
+                    <p style="margin:20px 0;color:var(--text-muted);font-size:0.9rem;">
+                        Changing the weights, built on the Phase 1 engine. A rank-1 LoRA
+                        patch fits a correction while training a fraction of the
+                        weights; a Bradley-Terry reward model recovers human taste from
+                        comparisons; DPO moves a policy onto preferences with no RL loop.
+                    </p>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <a href="finetuning/step1_lora.py" class="btn btn-sm btn-outline">Step 1</a>
+                        <a href="finetuning/step2_reward_model.py" class="btn btn-sm btn-outline">Step 2</a>
+                        <a href="finetuning/step3_preference_optimization.py" class="btn btn-sm btn-outline">Step 3</a>
+                        <a href="finetuning/BEGINNER_GUIDE.md" class="btn btn-sm btn-ghost">Guide</a>
+                    </div>
+                </div>
+
+                <div class="card phase-card" data-phase="Phase 9">
+                    <div style="display:flex;gap:16px;align-items:flex-start;">
+                        <div class="phase-number">9</div>
+                        <div>
+                            <div class="card-title">Quantization & Serving</div>
+                            <div class="card-meta">INT8 • KV-cache • Continuous batching</div>
+                        </div>
+                    </div>
+                    <p style="margin:20px 0;color:var(--text-muted);font-size:0.9rem;">
+                        Making it cheap to run. INT8 per-channel quantization (4× smaller,
+                        ~1% error), a KV-cache that turns O(n²) decoding into O(n)
+                        (~150× fewer FLOPs), and continuous batching that doubles GPU
+                        utilisation on the same lanes.
+                    </p>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <a href="serving/step1_quantization.py" class="btn btn-sm btn-outline">Step 1</a>
+                        <a href="serving/step2_kv_cache.py" class="btn btn-sm btn-outline">Step 2</a>
+                        <a href="serving/step3_serving_throughput.py" class="btn btn-sm btn-outline">Step 3</a>
+                        <a href="serving/BEGINNER_GUIDE.md" class="btn btn-sm btn-ghost">Guide</a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -443,9 +543,83 @@ cd AI-ML</code></pre>
                 <td>GPU Kernel Intuition</td>
                 <td>Why matmul is 80% of a forward pass, and how tiling cuts memory traffic</td>
             </tr>
-                        
+            <tr>
+                <td><a href="embeddings/BEGINNER_GUIDE.md">Embeddings Guide</a></td>
+                <td>Meaning as Geometry</td>
+                <td>Cosine similarity, skip-gram training, and LSH for billion-scale search</td>
+            </tr>
+            <tr>
+                <td><a href="rag/BEGINNER_GUIDE.md">RAG & Agents Guide</a></td>
+                <td>Using the Model</td>
+                <td>Prompt templates, retrieval + grounding + refusal, and the ReAct agent loop</td>
+            </tr>
+            <tr>
+                <td><a href="finetuning/BEGINNER_GUIDE.md">Fine-tuning Guide</a></td>
+                <td>Teaching the Model</td>
+                <td>LoRA vs full fine-tune, Bradley-Terry reward models, and DPO without RL</td>
+            </tr>
+            <tr>
+                <td><a href="serving/BEGINNER_GUIDE.md">Serving Guide</a></td>
+                <td>Shipping It</td>
+                <td>INT8 quantization, KV-cache O(n) decoding, continuous batching, roofline</td>
+            </tr>
+
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Keep Learning -->
+    <section class="section reveal" id="learn-more">
+        <div class="container">
+            <h2 class="section-title">Keep Learning</h2>
+            <p class="section-subtitle">
+                Start with the course built into this repo, then go deeper with
+                Anthropic's official training.
+            </p>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🧠</div>
+                        <div>
+                            <div class="card-title">AI Engineering Course</div>
+                            <div class="card-meta">This repo · 8 chapters × 5 levels</div>
+                        </div>
+                    </div>
+                    <p style="color:var(--text-muted);font-size:0.9rem;">
+                        Autograd → tokenization → GPUs → attention → embeddings →
+                        RAG/agents → RLHF → serving. Analogies, live labs, quizzes.
+                    </p>
+                    <a href="learn/" class="btn btn-sm btn-primary">Open the course</a>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🎓</div>
+                        <div>
+                            <div class="card-title">Claude 101</div>
+                            <div class="card-meta">External · academy.claude.com</div>
+                        </div>
+                    </div>
+                    <p style="color:var(--text-muted);font-size:0.9rem;">
+                        Anthropic's introduction to working with Claude — prompting
+                        fundamentals and core concepts.
+                    </p>
+                    <a href="https://academy.claude.com/courses/claude-101" class="btn btn-sm btn-outline" target="_blank" rel="noopener">Go to course ↗</a>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🤝</div>
+                        <div>
+                            <div class="card-title">Introduction to Claude Cowork</div>
+                            <div class="card-meta">External · academy.claude.com</div>
+                        </div>
+                    </div>
+                    <p style="color:var(--text-muted);font-size:0.9rem;">
+                        Anthropic's course on collaborating with Claude on real work.
+                    </p>
+                    <a href="https://academy.claude.com/courses/introduction-to-claude-cowork" class="btn btn-sm btn-outline" target="_blank" rel="noopener">Go to course ↗</a>
+                </div>
             </div>
         </div>
     </section>

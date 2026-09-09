@@ -1,9 +1,11 @@
 name: Deploy AI-ML to GitHub Pages
 
-# Deploys ONLY the static web files (no .py sources, tests, or watcher scripts).
-# Package list: index.html, 404.html, assets/, lab/*.html, lab/assets.(css|js),
-# micrograd explainer .md mirrored at root, learn/. Excludes: *.py, *.ps1,
-# auto_sync.log, .github/, watch scripts.
+# Deploys the static site plus the raw lesson sources so in-page links to
+# `<module>/stepN_*.py` resolve (GitHub Pages serves them as plain text).
+# Package: index.html, 404.html, assets/, learn/, lab/, and every module
+# dir (micrograd, tokenizer, attention, matmul, embeddings, rag, finetuning,
+# serving) — their .html/.css/.js/.svg/.md AND .py. Excludes: *.ps1,
+# auto_sync.log, __pycache__, .github/, watch scripts.
 
 on:
   push:
@@ -36,21 +38,22 @@ jobs:
           # works without manually flipping Settings → Pages.
           enablement: true
 
-      - name: Build lean site package (web files only)
+      - name: Build site package (static site + raw lesson sources)
         run: |
           rm -rf _site_pkg && mkdir -p _site_pkg
           cp index.html _site_pkg/ 2>/dev/null || true
           cp 404.html _site_pkg/ 2>/dev/null || true
-          for d in assets learn lab tokenizer attention micrograd; do
+          cp *.md _site_pkg/ 2>/dev/null || true
+          cp LICENSE _site_pkg/ 2>/dev/null || true
+          for d in assets learn lab micrograd tokenizer attention matmul \
+                   embeddings rag finetuning serving; do
             [ -d "$d" ] && mkdir -p "_site_pkg/$d" && \
-              find "$d" \( -name '*.html' -o -name '*.css' -o -name '*.js' -o -name '*.svg' -o -name '*.png' -o -name '*.json' -o -name '*.md' \) \
-                -not -path '*/node_modules/*' -exec cp --parents {} _site_pkg/ \;
+              find "$d" \( -name '*.html' -o -name '*.css' -o -name '*.js' -o -name '*.svg' -o -name '*.png' -o -name '*.json' -o -name '*.md' -o -name '*.py' \) \
+                -not -path '*/node_modules/*' -not -path '*/__pycache__/*' -exec cp --parents {} _site_pkg/ \;
           done
-          # strip python/tests/logs that slipped in via .md-adjacent copies
-          find _site_pkg \( -name '*.py' -o -name '*.ps1' -o -name 'auto_sync.log' -o -name '__pycache__' \) -delete
-          # exclude raw python sources & tests explicitly
-          find _site_pkg \( -name '*test*.py' -o -name 'scenarios_tester.py' \) -delete || true
-          du -sh _site_pkg && find _site_pkg -type f | head -40
+          # strip Windows helpers / logs that sit next to the sources
+          find _site_pkg \( -name '*.ps1' -o -name 'auto_sync.log' -o -name '__pycache__' \) -exec rm -rf {} + 2>/dev/null || true
+          du -sh _site_pkg && find _site_pkg -type f | head -60
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3

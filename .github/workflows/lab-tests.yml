@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Run layer + scenario tester (52 checks)
+      - name: Run layer + scenario tester (69 checks)
         run: python lab/scenarios_tester.py
 
       - name: Run micrograd lessons (regression check)
@@ -45,3 +45,27 @@ jobs:
           python matmul/step2_tiled.py
           python matmul/step3_strassen.py
           python matmul/step4_matvec.py
+
+      - name: Run embeddings lessons (regression check)
+        run: |
+          python embeddings/step1_meaning_as_geometry.py
+          python embeddings/step2_learn_word_vectors.py
+          python embeddings/step3_vector_search.py
+
+      - name: Run rag lessons (regression check)
+        run: |
+          python rag/step1_prompting.py
+          python rag/step2_mini_rag.py
+          python rag/step3_agent_loop.py
+
+      - name: Run finetuning lessons (regression check)
+        run: |
+          python finetuning/step1_lora.py
+          python finetuning/step2_reward_model.py
+          python finetuning/step3_preference_optimization.py
+
+      - name: Run serving lessons (regression check)
+        run: |
+          python serving/step1_quantization.py
+          python serving/step2_kv_cache.py
+          python serving/step3_serving_throughput.py
