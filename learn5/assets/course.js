@@ -42,12 +42,13 @@
     });
     var tot = totalPct();
     app.innerHTML =
-      '<section class="c-hero"><h1>Part 3 — <span>The Python stack</span></h1>' +
-      '<p class="sub">' + CHAPTERS.length + ' chapters covering the Python libraries every data scientist / ML engineer is expected to know: ' +
-      'NumPy, pandas, Matplotlib/Seaborn, SciPy, statsmodels, scikit-learn, XGBoost/LightGBM/CatBoost, SHAP, PyTorch, Keras, ' +
-      'Hugging Face, spaCy, OpenCV, time-series and MLOps tooling. Each in 5 levels ending in an <b>Interview drill</b> — ' +
-      'real questions, model answers, and the traps. ' +
-      '<a href="../learn2/" style="color:var(--cyan)">← Part 2 is applied system design</a>.</p>' +
+      '<section class="c-hero"><h1>Part 5 — <span>Databases &amp; data systems</span></h1>' +
+      '<p class="sub">' + CHAPTERS.length + ' chapters on SQL, NoSQL, vector and graph databases with production depth: ' +
+      'data modeling, indexes &amp; query planners, transactions &amp; isolation, replication, sharding, CAP/PACELC, PostgreSQL, ' +
+      'Redis/DynamoDB, MongoDB, Cassandra, LSM vs B-tree, the lakehouse, Elasticsearch, vector DBs, graph DBs, Kafka/CDC, ' +
+      'datastore selection, and database operations. Each in 5 levels ending in an <b>Interview drill</b> — verbatim questions, ' +
+      'model answers, and two production scenarios per chapter. ' +
+      '<a href="../learn4/" style="color:var(--cyan)">← Part 4 is ML interviews &amp; production</a>.</p>' +
       '<div class="c-meta"><span><b>' + CHAPTERS.length + '</b> chapters</span><span><b>5</b> levels each</span>' +
       '<span><b>' + (CHAPTERS.length * 5) + '</b> lessons</span><span><b>' + (CHAPTERS.length * 3) + '</b> checkpoint questions</span>' +
       '<span><b>0</b> prerequisites</span></div></section>' +
@@ -56,7 +57,7 @@
       (doneAll === CHAPTERS.length ? ' — 🎉 Course complete!' : ' — pick any chapter below') + '</p></div>' +
       '<div class="chgrid">' + cards + '</div>' +
       '<footer class="c-foot"><div class="links">' +
-      '<a href="../">← Main site</a><a href="../learn/">📘 P1</a><a href="../learn2/">📗 P2</a><a href="../learn4/">📕 P4</a><a href="../learn5/">📓 P5</a><a href="../lab/playground.html">🔬 Playground</a>' +
+      '<a href="../">← Main site</a><a href="../learn/">📘 P1</a><a href="../learn2/">📗 P2</a><a href="../learn3/">📙 P3</a><a href="../learn4/">📕 P4</a><a href="../lab/playground.html">🔬 Playground</a>' +
       '<a href="https://github.com/satyabhan007/AI-ML" target="_blank" rel="noopener">GitHub</a>' +
       '<a href="https://satyabhan007.github.io/" target="_blank" rel="noopener">Portfolio</a>' +
       '<a href="https://www.linkedin.com/in/satyabhan-bhadoriya-777b28239/" target="_blank" rel="noopener">LinkedIn</a></div>' +
@@ -112,7 +113,7 @@
       '<button id="nextLv"' + (curLv === 5 ? ' disabled' : '') + '>' + (curLv === 4 ? 'Final level →' : 'Next level →') + '</button></div></section>' +
       quizHtml +
       '<footer class="c-foot"><div class="links">' +
-      '<a href="#/">← All chapters</a><a href="../learn/">📘 P1</a><a href="../learn2/">📗 P2</a><a href="../learn4/">📕 P4</a><a href="../learn5/">📓 P5</a><a href="../lab/playground.html">🔬 Playground</a>' +
+      '<a href="#/">← All chapters</a><a href="../learn/">📘 P1</a><a href="../learn2/">📗 P2</a><a href="../learn3/">📙 P3</a><a href="../learn4/">📕 P4</a><a href="../lab/playground.html">🔬 Playground</a>' +
       '<a href="https://github.com/satyabhan007/AI-ML" target="_blank" rel="noopener">GitHub</a>' +
       '<a href="https://www.linkedin.com/in/satyabhan-bhadoriya-777b28239/" target="_blank" rel="noopener">LinkedIn</a></div></footer>';
 
