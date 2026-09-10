@@ -13,6 +13,7 @@
 - 🌐 **[Course · Part 1 — Fundamentals](https://satyabhan007.github.io/AI-ML/learn/)** — 8 chapters × 5 levels (analogy → expert), built from scratch, with live labs.
 - 📗 **[Course · Part 2 — Applied](https://satyabhan007.github.io/AI-ML/learn2/)** — 15 chapters × 5 levels on shipping LLM systems: structured output, tool calling, context engineering, vector DBs, RAG, reranking, agents, MCP, deterministic pipelines, evals, guardrails, caching, observability, fine-tuning.
 - 📙 **[Course · Part 3 — The Python Stack (interview edition)](https://satyabhan007.github.io/AI-ML/learn3/)** — 16 chapters × 5 levels on NumPy, pandas, Matplotlib/Seaborn, SciPy, statsmodels, scikit-learn, XGBoost/LightGBM/CatBoost, SHAP, Optuna, PyTorch, Keras, Hugging Face, spaCy, OpenCV, time series and MLOps — each chapter ends in an interview drill.
+- 📕 **[Course · Part 4 — ML Interviews & Production Systems](https://satyabhan007.github.io/AI-ML/learn4/)** — 17 chapters × 5 levels on the ML interview map, probability & stats, classical ML theory, DL architectures & training, recommenders, search & ranking, A/B testing, causal inference, ML system design, SQL, distributed training, production monitoring & drift, and responsible AI — each ending in a deep interview drill.
 - 🧪 **[The Interactive Playground](https://satyabhan007.github.io/AI-ML/lab/playground.html)** — 6 browser labs, zero install.
 - 📂 Or read the source below, module by module.
 
@@ -36,6 +37,9 @@ AI-ML/
 │                  #   agents, MCP, evals, guardrails, caching, observability, fine-tuning, …)
 ├── learn3/        # Course Part 3 — Python Stack, interview edition: 16 chapters × 5 levels
 │                  #   (NumPy, pandas, sklearn, boosting, SHAP, PyTorch, HF, spaCy, CV, TS, MLOps)
+├── learn4/        # Course Part 4 — ML Interviews & Production Systems: 17 chapters × 5 levels
+│                  #   (interview map, prob/stats, ML theory, DL, recsys, ranking, A/B, causal,
+│                  #    system design, SQL, distributed training, monitoring/drift, responsible AI)
 ├── lab/           # playground.html (6 live labs) + scenarios_tester.py (69 checks)
 └── *.md           # Root explainer guides mirrored from micrograd/ (REPORT, VISUAL_GUIDE, …)
 ```
@@ -105,6 +109,7 @@ python serving/step2_kv_cache.py
 - **[Course · Part 1](https://satyabhan007.github.io/AI-ML/learn/)** (this repo) — the eight topics above as a guided 8 × 5 course.
 - **[Course · Part 2](https://satyabhan007.github.io/AI-ML/learn2/)** (this repo) — applied AI engineering, 15 × 5: tool calling, context engineering, vector DBs, RAG, reranking, agents, MCP, deterministic pipelines, evals, guardrails, caching, observability, fine-tuning.
 - **[Course · Part 3](https://satyabhan007.github.io/AI-ML/learn3/)** (this repo) — the Python DS/ML library stack, 16 × 5, interview edition: NumPy, pandas, viz, SciPy, statsmodels, scikit-learn, boosting, SHAP, Optuna, PyTorch, Keras, Hugging Face, spaCy, OpenCV, time series, MLOps.
+- **[Course · Part 4](https://satyabhan007.github.io/AI-ML/learn4/)** (this repo) — ML interviews & production systems, 17 × 5: interview map, probability/stats, classical ML theory, DL architectures & training, recommenders, search/ranking, A/B testing, causal inference, ML system design, SQL, distributed training, production monitoring & drift, responsible AI.
 - **[Claude 101](https://academy.claude.com/courses/claude-101)** — Anthropic's introduction to working with Claude.
 - **[Introduction to Claude Cowork](https://academy.claude.com/courses/introduction-to-claude-cowork)** — Anthropic's course on collaborating with Claude on real work.
 
