@@ -53,7 +53,7 @@
       (doneAll === CHAPTERS.length ? ' — 🎉 Course complete!' : ' — pick any chapter below') + '</p></div>' +
       '<div class="chgrid">' + cards + '</div>' +
       '<footer class="c-foot"><div class="links">' +
-      '<a href="../">← Main site</a><a href="../learn2/">📗 P2</a><a href="../learn3/">📙 P3</a><a href="../learn4/">📕 P4</a><a href="../learn5/">📓 P5</a><a href="../lab/playground.html">🔬 Playground</a>' +
+      '<a href="../">← Main site</a><a href="../learn2/">📗 P2</a><a href="../learn3/">📙 P3</a><a href="../learn4/">📕 P4</a><a href="../learn5/">📓 P5</a><a href="../learn6/">🏗️ P6</a><a href="../learn7/">🚀 P7</a><a href="../learn8/">📡 P8</a><a href="../learn9/">🏢 P9</a><a href="../lab/playground.html">🔬 Playground</a>' +
       '<a href="https://github.com/satyabhan007/AI-ML" target="_blank" rel="noopener">GitHub</a>' +
       '<a href="https://satyabhan007.github.io/" target="_blank" rel="noopener">Portfolio</a>' +
       '<a href="https://www.linkedin.com/in/satyabhan-bhadoriya-777b28239/" target="_blank" rel="noopener">LinkedIn</a></div>' +
@@ -109,7 +109,7 @@
       '<button id="nextLv"' + (curLv === 5 ? ' disabled' : '') + '>' + (curLv === 4 ? 'Final level →' : 'Next level →') + '</button></div></section>' +
       quizHtml +
       '<footer class="c-foot"><div class="links">' +
-      '<a href="#/">← All chapters</a><a href="../learn2/">📗 P2</a><a href="../learn3/">📙 P3</a><a href="../learn4/">📕 P4</a><a href="../learn5/">📓 P5</a><a href="../lab/playground.html">🔬 Playground</a>' +
+      '<a href="#/">← All chapters</a><a href="../learn2/">📗 P2</a><a href="../learn3/">📙 P3</a><a href="../learn4/">📕 P4</a><a href="../learn5/">📓 P5</a><a href="../learn6/">🏗️ P6</a><a href="../learn7/">🚀 P7</a><a href="../learn8/">📡 P8</a><a href="../learn9/">🏢 P9</a><a href="../lab/playground.html">🔬 Playground</a>' +
       '<a href="https://github.com/satyabhan007/AI-ML" target="_blank" rel="noopener">GitHub</a>' +
       '<a href="https://www.linkedin.com/in/satyabhan-bhadoriya-777b28239/" target="_blank" rel="noopener">LinkedIn</a></div></footer>';
 
