@@ -42,11 +42,12 @@
     });
     var tot = totalPct();
     app.innerHTML =
-      '<section class="c-hero"><h1>Part 2 — <span>Ship the system</span></h1>' +
-      '<p class="sub">' + CHAPTERS.length + ' chapters on APPLIED AI engineering: structured output, tool calling, ' +
-      'context engineering, vector search, RAG, reranking, agents, MCP, evals, guardrails, caching, observability and fine-tuning. ' +
-      'Each in 5 levels (Amateur → Expert), heavy on analogies, visual diagrams and real production scenarios. ' +
-      '<a href="../learn/" style="color:var(--cyan)">← Part 1 builds the pieces from scratch</a>.</p>' +
+      '<section class="c-hero"><h1>Part 4 — <span>Interviews &amp; production systems</span></h1>' +
+      '<p class="sub">' + CHAPTERS.length + ' chapters on the hard interview rounds and the systems behind real products: ' +
+      'the ML interview map, probability &amp; stats, classical ML theory, deep-learning architectures &amp; training, recommenders, ' +
+      'search &amp; ranking, A/B testing, causal inference, ML system design, SQL, distributed training, production monitoring &amp; drift, ' +
+      'and responsible AI. Each in 5 levels ending in a deep <b>Interview drill</b> — verbatim questions, model answers, and production scenarios. ' +
+      '<a href="../learn3/" style="color:var(--cyan)">← Part 3 is the Python library stack</a>.</p>' +
       '<div class="c-meta"><span><b>' + CHAPTERS.length + '</b> chapters</span><span><b>5</b> levels each</span>' +
       '<span><b>' + (CHAPTERS.length * 5) + '</b> lessons</span><span><b>' + (CHAPTERS.length * 3) + '</b> checkpoint questions</span>' +
       '<span><b>0</b> prerequisites</span></div></section>' +
@@ -55,7 +56,7 @@
       (doneAll === CHAPTERS.length ? ' — 🎉 Course complete!' : ' — pick any chapter below') + '</p></div>' +
       '<div class="chgrid">' + cards + '</div>' +
       '<footer class="c-foot"><div class="links">' +
-      '<a href="../">← Main site</a><a href="../learn/">📘 P1</a><a href="../learn3/">📙 P3</a><a href="../learn4/">📕 P4</a><a href="../lab/playground.html">🔬 Playground</a>' +
+      '<a href="../">← Main site</a><a href="../learn/">📘 P1</a><a href="../learn2/">📗 P2</a><a href="../learn3/">📙 P3</a><a href="../lab/playground.html">🔬 Playground</a>' +
       '<a href="https://github.com/satyabhan007/AI-ML" target="_blank" rel="noopener">GitHub</a>' +
       '<a href="https://satyabhan007.github.io/" target="_blank" rel="noopener">Portfolio</a>' +
       '<a href="https://www.linkedin.com/in/satyabhan-bhadoriya-777b28239/" target="_blank" rel="noopener">LinkedIn</a></div>' +
@@ -63,7 +64,7 @@
     window.scrollTo(0, 0);
   }
   /* ---------- CHAPTER VIEW ---------- */
-  var LEVEL_NAMES = ['🐣 Amateur', '🌱 Beginner', '⚙️ Builder', '🎯 Advanced', '🚀 Expert'];
+  var LEVEL_NAMES = ['🐣 Amateur', '🌱 Beginner', '⚙️ Builder', '🎯 Advanced', '🎓 Interview'];
 
   function renderChapter(n) {
     var c = CHAPTERS[n - 1];
@@ -111,7 +112,7 @@
       '<button id="nextLv"' + (curLv === 5 ? ' disabled' : '') + '>' + (curLv === 4 ? 'Final level →' : 'Next level →') + '</button></div></section>' +
       quizHtml +
       '<footer class="c-foot"><div class="links">' +
-      '<a href="#/">← All chapters</a><a href="../learn/">📘 P1</a><a href="../learn3/">📙 P3</a><a href="../learn4/">📕 P4</a><a href="../lab/playground.html">🔬 Playground</a>' +
+      '<a href="#/">← All chapters</a><a href="../learn/">📘 P1</a><a href="../learn2/">📗 P2</a><a href="../learn3/">📙 P3</a><a href="../lab/playground.html">🔬 Playground</a>' +
       '<a href="https://github.com/satyabhan007/AI-ML" target="_blank" rel="noopener">GitHub</a>' +
       '<a href="https://www.linkedin.com/in/satyabhan-bhadoriya-777b28239/" target="_blank" rel="noopener">LinkedIn</a></div></footer>';
 
