@@ -15,7 +15,13 @@
 - 📙 **[Course · Part 3 — The Python Stack (interview edition)](https://satyabhan007.github.io/AI-ML/learn3/)** — 16 chapters × 5 levels on NumPy, pandas, Matplotlib/Seaborn, SciPy, statsmodels, scikit-learn, XGBoost/LightGBM/CatBoost, SHAP, Optuna, PyTorch, Keras, Hugging Face, spaCy, OpenCV, time series and MLOps — each chapter ends in an interview drill.
 - 📕 **[Course · Part 4 — ML Interviews & Production Systems](https://satyabhan007.github.io/AI-ML/learn4/)** — 17 chapters × 5 levels on the ML interview map, probability & stats, classical ML theory, DL architectures & training, recommenders, search & ranking, A/B testing, causal inference, ML system design, SQL, distributed training, production monitoring & drift, and responsible AI — each ending in a deep interview drill.
 - 📓 **[Course · Part 5 — Databases & Data Systems](https://satyabhan007.github.io/AI-ML/learn5/)** — 18 chapters × 5 levels on SQL, NoSQL, vector & graph databases with production depth: data modeling, indexes & query planners, transactions & isolation, replication, sharding, CAP/PACELC, PostgreSQL, Redis/DynamoDB, MongoDB, Cassandra, LSM vs B-tree, the lakehouse, Elasticsearch, vector DBs, graph DBs, Kafka/CDC, datastore selection, and DB operations — each ending in an interview drill with two production scenarios per chapter.
+- 🏗️ **[Course · Part 6 — AI/ML System Design](https://satyabhan007.github.io/AI-ML/learn6/)** — 16 chapters × 5 levels on designing AI/ML systems at scale: capacity math & SLOs, online/batch/streaming serving, the inference gateway, KServe/Triton/vLLM/TGI/BentoML, feature stores & training-serving skew, retrieval at scale, caching for AI, GPU autoscaling & backpressure, multi-region & fallback models, cost/perf tradeoffs, and two end-to-end design walkthroughs — each ending in an interview drill.
+- 🚀 **[Course · Part 7 — Production Deployment & Delivery](https://satyabhan007.github.io/AI-ML/learn7/)** — 16 chapters × 5 levels on shipping AI/ML: containers & reproducibility, model/artifact registries, CI for ML, GitOps CD (Argo CD / Flux), progressive delivery (canary, blue-green, shadow traffic), Kubernetes for model workloads, managed inference, eval-in-CI release gates, rollback & kill switches, load testing, migrations, IaC, and supply-chain security — each ending in an interview drill.
+- 📡 **[Course · Part 8 — AI Observability & Production Metrics](https://satyabhan007.github.io/AI-ML/learn8/)** — 16 chapters × 5 levels on OpenTelemetry, Prometheus & Grafana, golden signals / RED / USE, SLOs & error budgets, LLM telemetry (tokens, cost/request, TTFT, cache-hit), tracing an agent request, eval-in-prod, drift & data quality, guardrail & safety metrics, dashboards, burn-rate alerting, AI-enriched ops, and cost observability / FinOps — each ending in an interview drill.
+- 🏢 **[Course · Part 9 — Enterprise-Scale AI/ML in Production](https://satyabhan007.github.io/AI-ML/learn9/)** — 16 chapters × 5 levels on platform engineering & the paved road, multi-tenancy & quotas, model & data governance, security for AI systems, compliance (EU AI Act, NIST AI RMF, ISO/IEC 42001, SOC 2), responsible AI, FinOps at scale, reliability & cell architecture, LLMOps, org design, vendor portability, a reference architecture, and an enterprise-readiness checklist — each ending in an interview drill.
 - 🧪 **[The Interactive Playground](https://satyabhan007.github.io/AI-ML/lab/playground.html)** — 6 browser labs, zero install.
+
+> **Standard, not from-scratch.** Parts 1–5 build the primitives in pure Python. Parts 6–9 teach the *industry-standard* production stack — Kubernetes, OpenTelemetry, Prometheus, Argo, Terraform, KServe — configured and operated, not reimplemented. Each Part 6–9 chapter names the canonical tool and ships minimal, CI-validated config under `learnN/labs/`.
 - 📂 Or read the source below, module by module.
 
 ---
@@ -45,6 +51,20 @@ AI-ML/
 │                  #   (modeling, indexes, transactions, replication, sharding, CAP, Postgres,
 │                  #    Redis, Mongo, Cassandra, LSM/B-tree, lakehouse, Elasticsearch, vector,
 │                  #    graph, Kafka/CDC, datastore choice, DB ops)
+├── learn6/        # Course Part 6 — AI/ML System Design: 16 chapters × 5 levels + labs/
+│                  #   (capacity/SLOs, serving architectures, KServe/Triton/vLLM, feature stores,
+│                  #    retrieval at scale, caching, autoscaling, multi-region, cost/perf)
+├── learn7/        # Course Part 7 — Production Deployment & Delivery: 16 chapters × 5 levels + labs/
+│                  #   (containers, registries, CI for ML, GitOps, progressive delivery, K8s,
+│                  #    managed inference, release gates, rollback, load testing, IaC, supply chain)
+├── learn8/        # Course Part 8 — AI Observability & Production Metrics: 16 chapters × 5 levels + labs/
+│                  #   (OpenTelemetry, Prometheus/Grafana, golden signals, SLOs, LLM telemetry,
+│                  #    tracing, eval-in-prod, drift, guardrail metrics, alerting, FinOps)
+├── learn9/        # Course Part 9 — Enterprise-Scale AI/ML: 16 chapters × 5 levels + labs/
+│                  #   (platform engineering, multi-tenancy, governance, security, compliance,
+│                  #    responsible AI, FinOps at scale, reliability, LLMOps, org design)
+│                  #
+│                  # learn6-9 share /assets/course.{css,js} (one renderer, lazy per-chapter data)
 ├── lab/           # playground.html (6 live labs) + scenarios_tester.py (69 checks)
 └── *.md           # Root explainer guides mirrored from micrograd/ (REPORT, VISUAL_GUIDE, …)
 ```
@@ -116,6 +136,10 @@ python serving/step2_kv_cache.py
 - **[Course · Part 3](https://satyabhan007.github.io/AI-ML/learn3/)** (this repo) — the Python DS/ML library stack, 16 × 5, interview edition: NumPy, pandas, viz, SciPy, statsmodels, scikit-learn, boosting, SHAP, Optuna, PyTorch, Keras, Hugging Face, spaCy, OpenCV, time series, MLOps.
 - **[Course · Part 4](https://satyabhan007.github.io/AI-ML/learn4/)** (this repo) — ML interviews & production systems, 17 × 5: interview map, probability/stats, classical ML theory, DL architectures & training, recommenders, search/ranking, A/B testing, causal inference, ML system design, SQL, distributed training, production monitoring & drift, responsible AI.
 - **[Course · Part 5](https://satyabhan007.github.io/AI-ML/learn5/)** (this repo) — databases & data systems, 18 × 5: SQL/NoSQL/vector/graph with production depth — modeling, indexes, transactions, replication, sharding, CAP, Postgres, Redis, Mongo, Cassandra, LSM vs B-tree, lakehouse, Elasticsearch, vector DBs, graph DBs, Kafka/CDC, datastore selection, DB operations.
+- **[Course · Part 6](https://satyabhan007.github.io/AI-ML/learn6/)** (this repo) — AI/ML system design, 16 × 5: capacity math & SLOs, serving architectures, KServe/Triton/vLLM, feature stores & training-serving skew, retrieval at scale, caching, GPU autoscaling & backpressure, multi-region & fallback models, cost/perf, two end-to-end walkthroughs.
+- **[Course · Part 7](https://satyabhan007.github.io/AI-ML/learn7/)** (this repo) — production deployment & delivery, 16 × 5: containers & reproducibility, registries, CI for ML, GitOps CD, progressive delivery, Kubernetes for model workloads, managed inference, eval-in-CI gates, rollback & kill switches, load testing, migrations, IaC, supply-chain security.
+- **[Course · Part 8](https://satyabhan007.github.io/AI-ML/learn8/)** (this repo) — AI observability & production metrics, 16 × 5: OpenTelemetry, Prometheus/Grafana, golden signals/RED/USE, SLOs & error budgets, LLM telemetry, tracing an agent request, eval-in-prod, drift & data quality, guardrail & safety metrics, dashboards, burn-rate alerting, AI-enriched ops, FinOps.
+- **[Course · Part 9](https://satyabhan007.github.io/AI-ML/learn9/)** (this repo) — enterprise-scale AI/ML, 16 × 5: platform engineering & the paved road, multi-tenancy & quotas, model & data governance, security for AI systems, compliance (EU AI Act, NIST AI RMF, ISO/IEC 42001, SOC 2), responsible AI, FinOps at scale, reliability & cell architecture, LLMOps, org design, vendor portability, reference architecture, readiness checklist.
 - **[Claude 101](https://academy.claude.com/courses/claude-101)** — Anthropic's introduction to working with Claude.
 - **[Introduction to Claude Cowork](https://academy.claude.com/courses/introduction-to-claude-cowork)** — Anthropic's course on collaborating with Claude on real work.
 

@@ -54,6 +54,10 @@
                 <a href="learn3/">P3</a>
                 <a href="learn4/">P4</a>
                 <a href="learn5/">P5</a>
+                <a href="learn6/">P6</a>
+                <a href="learn7/">P7</a>
+                <a href="learn8/">P8</a>
+                <a href="learn9/">P9</a>
                 <a href="#playground">Playground</a>
                 <a href="#docs">Docs</a>
             </nav>
@@ -123,7 +127,7 @@
                 <strong>zero-black-box</strong>.
             </p>
             <div class="card" style="margin-bottom:32px;border-left:3px solid #3b82f6;">
-                <div class="card-title">📘 Prefer a guided path? Five courses, 74 chapters.</div>
+                <div class="card-title">📘 Prefer a guided path? Nine courses, 138 chapters.</div>
                 <p style="margin:12px 0;color:var(--text-muted);font-size:0.92rem;">
                     <strong>Part 1 — Fundamentals</strong>: the 8 topics below as
                     <strong>8 chapters × 5 levels</strong>, analogy to expert view, with live labs.<br>
@@ -142,7 +146,32 @@
                     on SQL, NoSQL, vector &amp; graph databases with production depth — data modeling, indexes &amp;
                     query planners, transactions &amp; isolation, replication, sharding, CAP/PACELC, PostgreSQL,
                     Redis/DynamoDB, MongoDB, Cassandra, LSM vs B-tree, the lakehouse, Elasticsearch, vector DBs,
-                    graph DBs, Kafka/CDC, datastore selection, and DB operations — each ending in an interview drill.
+                    graph DBs, Kafka/CDC, datastore selection, and DB operations — each ending in an interview drill.<br>
+                    <strong>Part 6 — AI/ML System Design</strong>: <strong>16 chapters × 5 levels</strong>
+                    on designing AI/ML systems at scale — capacity math &amp; SLOs, online/batch/streaming serving, the
+                    inference gateway, KServe/Triton/vLLM/TGI/BentoML, feature stores &amp; training-serving skew, retrieval
+                    at scale, caching for AI, GPU autoscaling &amp; backpressure, multi-region &amp; fallback models,
+                    cost/perf tradeoffs, and two end-to-end walkthroughs.<br>
+                    <strong>Part 7 — Production Deployment &amp; Delivery</strong>: <strong>16 chapters × 5 levels</strong>
+                    on shipping AI/ML — containers &amp; reproducibility, model/artifact registries, CI for ML, GitOps CD
+                    (Argo CD / Flux), progressive delivery (canary, blue-green, shadow traffic), Kubernetes for model
+                    workloads, managed inference, eval-in-CI release gates, rollback &amp; kill switches, load testing,
+                    migrations, IaC, and supply-chain security.<br>
+                    <strong>Part 8 — AI Observability &amp; Production Metrics</strong>: <strong>16 chapters × 5 levels</strong>
+                    on OpenTelemetry, Prometheus &amp; Grafana, golden signals / RED / USE, SLOs &amp; error budgets, LLM
+                    telemetry (tokens, cost/request, TTFT, cache-hit), tracing an agent request, eval-in-prod, drift &amp;
+                    data quality, guardrail &amp; safety metrics, dashboards, burn-rate alerting, AI-enriched ops, and
+                    cost observability / FinOps.<br>
+                    <strong>Part 9 — Enterprise-Scale AI/ML in Production</strong>: <strong>16 chapters × 5 levels</strong>
+                    on platform engineering &amp; the paved road, multi-tenancy &amp; quotas, model &amp; data governance,
+                    security for AI systems, compliance (EU AI Act, NIST AI RMF, ISO/IEC 42001, SOC 2), responsible AI,
+                    FinOps at scale, reliability &amp; cell architecture, LLMOps, org design, vendor portability, a
+                    reference architecture, and an enterprise-readiness checklist.
+                </p>
+                <p style="margin:0 0 12px;color:var(--text-muted);font-size:0.86rem;">
+                    <strong>Parts 1–5</strong> build the primitives from scratch. <strong>Parts 6–9</strong> teach the
+                    industry-standard stack — Kubernetes, OpenTelemetry, Prometheus, Argo, Terraform, KServe —
+                    configured and operated, not reimplemented.
                 </p>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;">
                     <a href="learn/" class="btn btn-sm btn-primary">Part 1 — Fundamentals →</a>
@@ -150,6 +179,10 @@
                     <a href="learn3/" class="btn btn-sm btn-outline">Part 3 — Python Stack →</a>
                     <a href="learn4/" class="btn btn-sm btn-outline">Part 4 — Interviews &amp; Prod →</a>
                     <a href="learn5/" class="btn btn-sm btn-outline">Part 5 — Databases →</a>
+                    <a href="learn6/" class="btn btn-sm btn-outline">Part 6 — System Design →</a>
+                    <a href="learn7/" class="btn btn-sm btn-outline">Part 7 — Deployment →</a>
+                    <a href="learn8/" class="btn btn-sm btn-outline">Part 8 — Observability →</a>
+                    <a href="learn9/" class="btn btn-sm btn-outline">Part 9 — Enterprise Scale →</a>
                 </div>
             </div>
             <div class="grid-3">
@@ -599,8 +632,8 @@ cd AI-ML</code></pre>
         <div class="container">
             <h2 class="section-title">Keep Learning</h2>
             <p class="section-subtitle">
-                Five courses built into this repo, then go deeper with
-                Anthropic's official training.
+                Nine courses built into this repo — Parts 1–5 from scratch, Parts 6–9 on the
+                industry-standard production stack — then go deeper with Anthropic's official training.
             </p>
             <div class="grid-3">
                 <div class="card">
@@ -682,6 +715,70 @@ cd AI-ML</code></pre>
                 </div>
                 <div class="card">
                     <div class="card-header">
+                        <div class="card-icon">🏗️</div>
+                        <div>
+                            <div class="card-title">Course · Part 6 — AI/ML System Design</div>
+                            <div class="card-meta">This repo · 16 chapters × 5 levels · standard, not from-scratch</div>
+                        </div>
+                    </div>
+                    <p style="color:var(--text-muted);font-size:0.9rem;">
+                        Capacity math &amp; SLOs, online/batch/streaming serving, the inference gateway,
+                        KServe/Triton/vLLM, feature stores &amp; training-serving skew, retrieval at scale,
+                        caching for AI, GPU autoscaling &amp; backpressure, multi-region &amp; fallback models,
+                        cost/perf tradeoffs, plus two end-to-end design walkthroughs.
+                    </p>
+                    <a href="learn6/" class="btn btn-sm btn-primary">Open Part 6</a>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🚀</div>
+                        <div>
+                            <div class="card-title">Course · Part 7 — Deployment &amp; Delivery</div>
+                            <div class="card-meta">This repo · 16 chapters × 5 levels · standard, not from-scratch</div>
+                        </div>
+                    </div>
+                    <p style="color:var(--text-muted);font-size:0.9rem;">
+                        Containers &amp; reproducibility, model/artifact registries, CI for ML, GitOps CD
+                        (Argo CD / Flux), progressive delivery (canary, blue-green, shadow traffic),
+                        Kubernetes for model workloads, managed inference, eval-in-CI release gates,
+                        rollback &amp; kill switches, load testing, migrations, IaC, supply-chain security.
+                    </p>
+                    <a href="learn7/" class="btn btn-sm btn-primary">Open Part 7</a>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📡</div>
+                        <div>
+                            <div class="card-title">Course · Part 8 — AI Observability</div>
+                            <div class="card-meta">This repo · 16 chapters × 5 levels · standard, not from-scratch</div>
+                        </div>
+                    </div>
+                    <p style="color:var(--text-muted);font-size:0.9rem;">
+                        OpenTelemetry, Prometheus &amp; Grafana, golden signals / RED / USE, SLOs &amp; error
+                        budgets, LLM telemetry (tokens, cost/request, TTFT, cache-hit), tracing an agent
+                        request, eval-in-prod, drift &amp; data quality, guardrail &amp; safety metrics,
+                        dashboards, burn-rate alerting, AI-enriched ops, and cost observability / FinOps.
+                    </p>
+                    <a href="learn8/" class="btn btn-sm btn-primary">Open Part 8</a>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🏢</div>
+                        <div>
+                            <div class="card-title">Course · Part 9 — Enterprise Scale</div>
+                            <div class="card-meta">This repo · 16 chapters × 5 levels · standard, not reinvented</div>
+                        </div>
+                    </div>
+                    <p style="color:var(--text-muted);font-size:0.9rem;">
+                        Platform engineering &amp; the paved road, multi-tenancy &amp; quotas, model &amp; data
+                        governance, security for AI systems, compliance (EU AI Act, NIST AI RMF, ISO/IEC 42001,
+                        SOC 2), responsible AI, FinOps at scale, reliability &amp; cell architecture, LLMOps,
+                        org design, vendor portability, a reference architecture, and a readiness checklist.
+                    </p>
+                    <a href="learn9/" class="btn btn-sm btn-primary">Open Part 9</a>
+                </div>
+                <div class="card">
+                    <div class="card-header">
                         <div class="card-icon">🎓</div>
                         <div>
                             <div class="card-title">Claude 101</div>
@@ -722,7 +819,9 @@ cd AI-ML</code></pre>
                 <p class="footer-text">
                     Built with ❤️ by Satya. A self-contained, zero-dependency curriculum for learning AI
                     engineering from first principles. Every line of code is designed to be understood —
-                    no black boxes, no hidden magic.
+                    no black boxes, no hidden magic. <strong>Parts 1–5 build the primitives from scratch;
+                    Parts 6–9 teach the industry-standard production stack</strong> — Kubernetes,
+                    OpenTelemetry, Prometheus, Argo, Terraform, KServe — configured and operated, not reimplemented.
                 </p>
                 <div class="social-links">
                     <a href="https://satyabhan007.github.io" class="social-link" target="_blank" rel="noopener" title="GitHub Pages">

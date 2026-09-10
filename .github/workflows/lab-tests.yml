@@ -69,3 +69,54 @@ jobs:
           python serving/step1_quantization.py
           python serving/step2_kv_cache.py
           python serving/step3_serving_throughput.py
+
+  # Parts 6-9 are static courses (shared renderer + lazy per-chapter data) plus
+  # runnable infra configs under learnN/labs/. This job syntax-checks the course
+  # JS/JSON and validates any lab config files that have landed.
+  parts_6_9:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Syntax-check the shared renderer and every course data file
+        run: |
+          node --check assets/course.js
+          for f in $(find learn6 learn7 learn8 learn9 -name '*.js'); do
+            echo "check $f"; node --check "$f"
+          done
+
+      - name: Each part has a manifest and at least chapter 1
+        run: |
+          for p in learn6 learn7 learn8 learn9; do
+            test -f "$p/assets/manifest.js" || { echo "missing $p/assets/manifest.js"; exit 1; }
+            test -f "$p/assets/ch/01.js"   || { echo "missing $p/assets/ch/01.js"; exit 1; }
+          done
+
+      - name: Validate lab config files (YAML / JSON / shell) if present
+        run: |
+          pip install --quiet yamllint
+          shopt -s globstar nullglob
+          y=(learn6/labs/**/*.y*ml learn7/labs/**/*.y*ml learn8/labs/**/*.y*ml learn9/labs/**/*.y*ml)
+          if [ ${#y[@]} -gt 0 ]; then yamllint -d "{extends: relaxed, rules: {line-length: disable}}" "${y[@]}"; else echo "no YAML labs yet"; fi
+          j=(learn6/labs/**/*.json learn7/labs/**/*.json learn8/labs/**/*.json learn9/labs/**/*.json)
+          for f in "${j[@]}"; do echo "json $f"; python -m json.tool "$f" > /dev/null; done
+          s=(learn6/labs/**/*.sh learn7/labs/**/*.sh learn8/labs/**/*.sh learn9/labs/**/*.sh)
+          for f in "${s[@]}"; do echo "sh $f"; bash -n "$f"; done
+
+      - name: Run any zero-dep Python labs (each must exit 0)
+        run: |
+          shopt -s globstar nullglob
+          for f in learn6/labs/**/*.py learn7/labs/**/*.py learn8/labs/**/*.py learn9/labs/**/*.py; do
+            echo "run $f"; python "$f" > /dev/null
+          done
