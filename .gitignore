@@ -29,3 +29,10 @@ Thumbs.db
 
 # Keep accounts.json out of version control (contains sensitive data)
 accounts.json
+
+# Terraform (learn7/labs/iac and friends) — state + local provider cache
+**/.terraform/
+**/.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+crash.log

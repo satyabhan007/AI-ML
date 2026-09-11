@@ -1,0 +1,48 @@
+# AI-ML · Part 9 lab — model-gateway tenancy config (Ch 2 / Ch 14).
+# Per-tenant isolation scope, quotas, tiered rate limits (token-based), token
+# budgets and metering labels. Consumed by the gateway (LiteLLM / Portkey / Kong).
+# CI: yamllint  +  python simulate.py
+defaults:
+  # limits are on TOKENS/min primarily (the real cost driver), req/s + concurrency as guards
+  rate_limit:
+    tokens_per_min: 60000
+    requests_per_sec: 20
+    max_concurrency: 40
+  quota:
+    tokens_per_month: 500000000
+    soft_threshold: 0.8        # alert owner + FinOps at 80%
+    on_exhaustion: degrade     # degrade -> cheaper model / cached; not a hard 429 cliff
+  metering_labels: [tenant, model, feature, route, env]
+
+tiers:
+  free:
+    rate_limit: { tokens_per_min: 10000, requests_per_sec: 5, max_concurrency: 8 }
+    quota: { tokens_per_month: 20000000, soft_threshold: 0.8, on_exhaustion: hard_429 }
+  standard: {}                 # inherits defaults
+  enterprise:
+    rate_limit: { tokens_per_min: 400000, requests_per_sec: 120, max_concurrency: 200 }
+    quota: { tokens_per_month: 8000000000, soft_threshold: 0.9, on_exhaustion: degrade }
+    isolation: silo            # dedicated shards / namespace (Ch 2)
+
+tenants:
+  - id: acme
+    tier: enterprise
+    allowed_models: [ranker-llm, embed-small]
+    allowed_data_classes: [internal, confidential]
+    isolation: silo
+  - id: globex
+    tier: standard
+    allowed_models: [ranker-llm]
+    isolation: pooled
+  - id: initech
+    tier: free
+    allowed_models: [ranker-llm]
+    isolation: pooled
+
+# fair-queuing so a tier's share is also a FLOOR under contention (Ch 2 anti-patterns)
+scheduler:
+  type: weighted-fair-queue
+  weights: { enterprise: 8, standard: 3, free: 1 }
+
+response_headers:
+  emit: [x-ratelimit-limit, x-ratelimit-remaining, x-quota-used-ratio, retry-after]

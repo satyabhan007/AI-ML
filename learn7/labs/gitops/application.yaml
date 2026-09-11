@@ -1,0 +1,21 @@
+# Argo CD Application — Git is the source of truth; the controller reconciles.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ranker-prod
+  namespace: argocd
+spec:
+  project: ai-ml
+  source:
+    repoURL: https://github.com/your-org/deploy.git
+    targetRevision: main
+    path: learn7/labs/gitops/overlays/prod
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ranker-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true       # revert out-of-band kubectl edits (Ch 4 drift)
+    syncOptions:
+      - CreateNamespace=true

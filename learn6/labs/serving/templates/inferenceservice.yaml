@@ -1,0 +1,44 @@
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  name: {{ .Values.model.name }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    serving.kserve.io/deploymentMode: Serverless
+spec:
+  predictor:
+    minReplicas: {{ .Values.autoscaling.minReplicas }}
+    maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+    scaleMetric: {{ .Values.autoscaling.scaleMetric }}
+    scaleTarget: {{ .Values.autoscaling.target }}
+    canaryTrafficPercent: {{ .Values.canaryTrafficPercent }}
+    nodeSelector:
+      {{- toYaml .Values.nodeSelector | nindent 6 }}
+    tolerations:
+      {{- toYaml .Values.tolerations | nindent 6 }}
+    containers:
+      - name: kserve-container
+        image: {{ .Values.runtime.image | quote }}
+        args:
+          {{- toYaml .Values.runtime.args | nindent 10 }}
+        env:
+          - name: STORAGE_URI
+            value: {{ .Values.model.storageUri | quote }}
+          - name: MODEL_VERSION
+            value: {{ .Values.model.storageUri | quote }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        startupProbe:                     # P7 Ch 6: generous, weights take minutes
+          httpGet:
+            path: /health
+            port: 8080
+          failureThreshold: 60
+          periodSeconds: 10

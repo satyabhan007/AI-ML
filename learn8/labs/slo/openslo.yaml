@@ -1,0 +1,50 @@
+# AI-ML · Part 8 lab — SLO as data (Ch 4). OpenSLO v1; a generator (Sloth /
+# oslo) turns this into the Prometheus recording + multi-burn-rate alert rules
+# in ../rules/prometheus-rules.yml.  CI: yamllint.
+apiVersion: openslo/v1
+kind: SLO
+metadata:
+  name: ranker-llm-latency-availability
+  displayName: Ranker LLM — fast and successful
+spec:
+  service: ranker-llm
+  description: >-
+    A request is "good" if it returns a non-5xx response within 300 ms.
+  budgetingMethod: Occurrences
+  timeWindow:
+    - duration: 28d
+      isRolling: true
+  objectives:
+    - displayName: 99.5% good
+      target: 0.995
+      sli:
+        metricSource:
+          type: Prometheus
+          spec:
+            good: |
+              sum(rate(http_request_duration_seconds_bucket{service="ranker-llm",code!~"5..",le="0.3"}[5m]))
+            total: |
+              sum(rate(http_request_duration_seconds_count{service="ranker-llm"}[5m]))
+  alertPolicies:
+    - alertPolicyRef: fast-and-slow-burn
+---
+apiVersion: openslo/v1
+kind: SLO
+metadata:
+  name: ranker-llm-quality
+  displayName: Ranker LLM — grounded answers
+spec:
+  service: ranker-llm
+  budgetingMethod: Occurrences
+  timeWindow:
+    - duration: 7d
+      isRolling: true
+  objectives:
+    - displayName: 97% grounded
+      target: 0.97
+      sli:
+        metricSource:
+          type: Prometheus
+          spec:
+            good: sum(rate(llm_groundedness_pass_total{service="ranker-llm"}[1h]))
+            total: sum(rate(llm_groundedness_checked_total{service="ranker-llm"}[1h]))

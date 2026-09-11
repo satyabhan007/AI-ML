@@ -1,0 +1,39 @@
+# AI-ML · Part 7 lab — gate the canary on p99, error rate AND a quality metric (Ch 5 L3).
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: ranker-canary
+spec:
+  args:
+    - name: service
+  metrics:
+    - name: p99-latency-ms
+      interval: 2m
+      failureLimit: 2
+      successCondition: result < 800
+      provider:
+        prometheus:
+          address: http://prometheus.monitoring:9090
+          query: >-
+            histogram_quantile(0.99, sum(rate(
+              http_request_duration_seconds_bucket{service="{{args.service}}",canary="true"}[2m]
+            )) by (le)) * 1000
+    - name: error-rate
+      interval: 2m
+      failureLimit: 2
+      successCondition: result < 0.02
+      provider:
+        prometheus:
+          address: http://prometheus.monitoring:9090
+          query: >-
+            sum(rate(http_requests_total{service="{{args.service}}",canary="true",code=~"5.."}[2m]))
+            / sum(rate(http_requests_total{service="{{args.service}}",canary="true"}[2m]))
+    - name: result-ctr
+      interval: 10m
+      failureLimit: 1
+      successCondition: result >= 0.92
+      provider:
+        prometheus:
+          address: http://prometheus.monitoring:9090
+          query: >-
+            avg_over_time(ranking_result_ctr_ratio{service="{{args.service}}",canary="true"}[10m])

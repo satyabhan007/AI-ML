@@ -1,0 +1,28 @@
+# AI-ML · Part 6 lab — semantic cache sidecar (Ch 8).
+#
+# The app embeds the incoming query (via TEI, the standard HF embedding server),
+# then does a vector KNN against Redis; on a hit above the threshold it returns
+# the stored answer and skips the model call. Key includes model + prompt version
+# + tenant (Ch 8 anti-patterns) — see cache-key.md.
+#
+#   docker compose up -d
+#   # create the vector index once:
+#   docker compose exec cache redis-cli FT.CREATE idx:sem ON HASH PREFIX 1 sem: \
+#     SCHEMA tenant TAG model TAG prompt_v TAG answer TEXT \
+#     embedding VECTOR HNSW 6 TYPE FLOAT32 DIM 384 DISTANCE_METRIC COSINE
+#
+# CI validates this file with:  docker compose -f docker-compose.yml config -q
+services:
+  cache:
+    image: redis/redis-stack-server:7.4.0-v1
+    ports:
+      - "6379:6379"
+    command: ["redis-stack-server", "--maxmemory", "512mb", "--maxmemory-policy", "allkeys-lru"]
+
+  embed:
+    image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.5
+    command: ["--model-id", "BAAI/bge-small-en-v1.5", "--port", "80"]
+    ports:
+      - "8081:80"
+    environment:
+      - HF_HUB_OFFLINE=0

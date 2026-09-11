@@ -2,18 +2,17 @@
 
 > **Standard, not from-scratch.** These labs stand up the *industry-standard*
 > observability stack with minimal config — OpenTelemetry, Prometheus, Grafana,
-> Loki, Tempo. Validated in CI (`.github/workflows/lab-tests.yml`).
-
-Landing in **Phase 3** alongside chapters 2–16:
+> Loki, Tempo. Validated in CI (`.github/workflows/lab-tests.yml`, job `parts_6_9`).
 
 | Lab | Stands up | Validated with |
 |---|---|---|
-| `stack/` | `docker-compose.yml` — OTel Collector + Prometheus + Grafana + Tempo + Loki + a tiny instrumented FastAPI model stub | `docker compose config`, `otelcol validate` |
-| `otel/` | an OTel Collector config with OTLP in, tail-based sampling, and the GenAI attributes mapped | `otelcol validate` |
-| `rules/` | Prometheus recording + alerting rules: golden signals, an SLO, a multi-window burn-rate alert | `promtool check rules` |
-| `slo/` | an SLO definition (Sloth / OpenSLO format) generating the burn-rate rules | `sloth validate` / `yamllint` |
-| `llm/` | an instrumentation snippet emitting tokens, cost/request, TTFT, tokens/sec, cache-hit as OTel metrics + span attributes | `python llm/instrument_demo.py` |
-| `dashboards/` | a Grafana dashboard JSON — per-model & per-tenant rows, exemplars metric→trace | `python -m json.tool` |
-| `drift/` | a zero-dep drift monitor (PSI / KL over a reference vs live window) exposed as Prometheus metrics | `python drift/monitor.py` |
+| [`stack/`](stack/) | `docker-compose.yml` — OTel Collector + Prometheus + Grafana + Tempo + Loki + `telemetrygen` to exercise the pipeline with zero app code | `docker compose config` |
+| [`otel/`](otel/) | the OTel Collector config used by `stack/` — OTLP in, PII redaction, tail-based sampling, Prometheus + Tempo out | `otelcol validate` |
+| [`rules/`](rules/) | Prometheus recording rules (golden signals), an SLO, and multi-window multi-burn-rate alerts, plus a quality/safety alert | `promtool check rules` |
+| [`slo/`](slo/) | the same SLOs as OpenSLO v1 — the source a generator (Sloth/oslo) would turn into the rules above | `yamllint` |
+| [`llm/`](llm/) | a zero-dep instrumentation demo emitting the OTel GenAI span attributes + the aggregate metrics (tokens, cost/req, TTFT, tokens/s, cache-hit, finish_reason) | `python llm/instrument_demo.py` |
+| [`dashboards/`](dashboards/) | a Grafana "service overview" dashboard JSON — golden signals + LLM + cost rows, `$model`/`$tenant` template vars, exemplars, a worst-tenants table | `python -m json.tool` |
+| [`drift/`](drift/) | a zero-dep PSI/KL drift monitor (reference vs. live window), printing a Prometheus `/metrics` block | `python drift/monitor.py` |
 
-Until Phase 3 lands, this directory is intentionally a placeholder so links resolve.
+`docker compose -f stack/docker-compose.yml up -d` then open Grafana at
+`localhost:3000` to see the pipeline end to end.

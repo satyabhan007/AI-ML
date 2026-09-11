@@ -1,0 +1,51 @@
+# AI-ML · Part 7 lab — Argo Rollouts canary with automated analysis (Ch 5).
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: ranker
+  labels:
+    app.kubernetes.io/name: ranker
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ranker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ranker
+    spec:
+      terminationGracePeriodSeconds: 120
+      containers:
+        - name: server
+          image: registry.example.com/ranker@sha256:2222222222222222222222222222222222222222222222222222222222222222
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            requests:
+              cpu: "1"
+              memory: 2Gi
+            limits:
+              cpu: "2"
+              memory: 3Gi
+  strategy:
+    canary:
+      analysis:
+        templates:
+          - templateName: ranker-canary
+        startingStep: 1
+        args:
+          - name: service
+            value: ranker
+      steps:
+        - setWeight: 5
+        - pause:
+            duration: 30m
+        - setWeight: 25
+        - pause:
+            duration: 30m
+        - setWeight: 50
+        - pause:
+            duration: 1h
+        - setWeight: 100

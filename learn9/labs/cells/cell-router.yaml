@@ -1,0 +1,50 @@
+# AI-ML · Part 9 lab — cell (bulkhead) router config (Ch 9).
+# Each cell is a full independent stack serving a tenant subset. The router is
+# the ONLY shared component on the request path and must be trivially reliable.
+# CI: yamllint.
+router:
+  # deterministic tenant -> cell mapping; large tenants get dedicated cells,
+  # the long tail is hashed across shared cells.
+  strategy: explicit-then-hash
+  hash: { algo: rendezvous, key: tenant_id }
+
+cells:
+  - name: cell-acme
+    region: us-east-1
+    dedicated_to: [acme]           # enterprise / regulated tenant, its own cell
+    capacity_tenants: 1
+    stack_ref: overlays/prod/cell-acme
+  - name: cell-us-1
+    region: us-east-1
+    shared: true
+    capacity_tenants: 400
+    stack_ref: overlays/prod/cell-us-1
+  - name: cell-us-2
+    region: us-east-1
+    shared: true
+    capacity_tenants: 400
+    stack_ref: overlays/prod/cell-us-2
+  - name: cell-eu-1
+    region: eu-west-1
+    shared: true
+    capacity_tenants: 400
+    stack_ref: overlays/prod/cell-eu-1
+
+# shuffle sharding INSIDE a shared cell: each tenant gets a random small worker
+# subset, so one bad tenant degrades only its co-sharded neighbours.
+shuffle_sharding:
+  enabled: true
+  workers_per_tenant: 4
+  worker_pool_size: 64
+
+deploy:
+  order: cell-by-cell             # a bad release hits one cell, not all (P7 Ch 5)
+  bake_per_cell: 30m
+  auto_abort_on: [slo_fast_burn, error_rate_gt_2pct]
+
+failover:
+  # lose a cell -> its tenants are re-hashed onto sibling cells in the same region;
+  # lose a region -> the router shifts to the other region (accepts RPO > 0).
+  intra_region: rehash-to-siblings
+  inter_region: manual-with-runbook
+  max_single_cell_traffic_pct: 15  # size cells so losing one is acceptable

@@ -1,0 +1,134 @@
+{
+  "uid": "aiml-svc-overview",
+  "title": "AI-ML · Service Overview (Part 8 Ch 10)",
+  "tags": ["ai-ml", "golden-signals"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "refresh": "30s",
+  "time": { "from": "now-6h", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "name": "model",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "prom" },
+        "query": "label_values(http_requests_total, service)",
+        "includeAll": true,
+        "multi": true
+      },
+      {
+        "name": "tenant",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "prom" },
+        "query": "label_values(http_requests_total{service=~\"$model\"}, tenant)",
+        "includeAll": true,
+        "multi": true
+      }
+    ]
+  },
+  "annotations": {
+    "list": [
+      {
+        "name": "deploys",
+        "datasource": { "type": "prometheus", "uid": "prom" },
+        "expr": "changes(build_info{service=~\"$model\"}[5m]) > 0",
+        "titleFormat": "deploy {{version}}"
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Traffic — requests/sec",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 8, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prom" },
+      "targets": [
+        {
+          "expr": "sum by (service) (rate(http_requests_total{service=~\"$model\",tenant=~\"$tenant\"}[5m]))",
+          "legendFormat": "{{service}}"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Errors — 5xx ratio (by class)",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 8, "x": 8, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prom" },
+      "fieldConfig": { "defaults": { "unit": "percentunit", "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 0.02 } ] } } },
+      "targets": [
+        {
+          "expr": "sum by (service) (rate(http_requests_total{service=~\"$model\",tenant=~\"$tenant\",code=~\"5..\"}[5m])) / sum by (service) (rate(http_requests_total{service=~\"$model\",tenant=~\"$tenant\"}[5m]))",
+          "legendFormat": "{{service}}"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Latency — success-only p50/p95/p99 (with exemplars -> trace)",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 8, "x": 16, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prom" },
+      "fieldConfig": { "defaults": { "unit": "s" } },
+      "targets": [
+        { "expr": "histogram_quantile(0.5, sum by (le) (rate(http_request_duration_seconds_bucket{service=~\"$model\",code!~\"5..\"}[5m])))", "legendFormat": "p50", "exemplar": true },
+        { "expr": "histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{service=~\"$model\",code!~\"5..\"}[5m])))", "legendFormat": "p95", "exemplar": true },
+        { "expr": "histogram_quantile(0.99, sum by (le) (rate(http_request_duration_seconds_bucket{service=~\"$model\",code!~\"5..\"}[5m])))", "legendFormat": "p99", "exemplar": true }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Saturation — GPU utilisation & queue depth",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 8, "x": 0, "y": 7 },
+      "datasource": { "type": "prometheus", "uid": "prom" },
+      "targets": [
+        { "expr": "avg by (service) (gpu_utilization_ratio{service=~\"$model\"})", "legendFormat": "gpu util" },
+        { "expr": "sum by (service) (vllm_num_requests_waiting{service=~\"$model\"})", "legendFormat": "queue depth" }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "LLM — tokens/sec in & out",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 8, "x": 8, "y": 7 },
+      "datasource": { "type": "prometheus", "uid": "prom" },
+      "targets": [
+        { "expr": "sum by (service) (rate(gen_ai_client_token_usage_sum{service=~\"$model\",type=\"input\"}[5m]))", "legendFormat": "in" },
+        { "expr": "sum by (service) (rate(gen_ai_client_token_usage_sum{service=~\"$model\",type=\"output\"}[5m]))", "legendFormat": "out" }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Cost per successful request  ·  cache-hit ratio",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 8, "x": 16, "y": 7 },
+      "datasource": { "type": "prometheus", "uid": "prom" },
+      "targets": [
+        { "expr": "job:cost_per_successful_request:5m{service=~\"$model\"}", "legendFormat": "$/req" },
+        { "expr": "avg by (service) (aiml_cache_hit_ratio{service=~\"$model\"})", "legendFormat": "cache hit" }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "SLO — error budget remaining & burn rate",
+      "type": "stat",
+      "gridPos": { "h": 5, "w": 12, "x": 0, "y": 14 },
+      "datasource": { "type": "prometheus", "uid": "prom" },
+      "targets": [
+        { "expr": "1 - (slo:sli_bad:ratio_rate6h{service=~\"$model\"} / 0.005)", "legendFormat": "budget remaining" }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Worst tenants by p99 (last 1h)",
+      "type": "table",
+      "gridPos": { "h": 5, "w": 12, "x": 12, "y": 14 },
+      "datasource": { "type": "prometheus", "uid": "prom" },
+      "targets": [
+        { "expr": "topk(10, histogram_quantile(0.99, sum by (tenant, le) (rate(http_request_duration_seconds_bucket{service=~\"$model\",code!~\"5..\"}[1h]))))", "format": "table", "instant": true }
+      ]
+    }
+  ]
+}

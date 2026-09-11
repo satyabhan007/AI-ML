@@ -1,0 +1,64 @@
+# AI-ML · Part 9 lab — enterprise-readiness checklist (Ch 16).
+# Five areas. `check.py` reads this + a set of answers and produces a go/no-go
+# report, weighted by risk tier. A "no" is a blocker OR a time-boxed exception.
+# CI: yamllint + check.py
+areas:
+  security:      # Ch 5, P7 Ch 10/14
+    - id: SEC-1
+      text: "Threat model done; prompt-injection / exfil defences layered."
+      tiers: [tier-1, tier-2, tier-3]
+    - id: SEC-2
+      text: "Secrets runtime-injected and rotatable without a deploy."
+      tiers: [tier-1, tier-2, tier-3]
+    - id: SEC-3
+      text: "Model plus image signed, SBOM on file; retrieval scoped by tenant."
+      tiers: [tier-1, tier-2]
+    - id: SEC-4
+      text: "Standing red-team suite plus safety metrics; egress controls on the runtime."
+      tiers: [tier-1]
+  governance:    # Ch 3/4/6/7
+    - id: GOV-1
+      text: "Risk tier assigned; model card plus eval evidence recorded."
+      tiers: [tier-1, tier-2, tier-3]
+    - id: GOV-2
+      text: "Approval on record (model-risk committee for tier-1)."
+      tiers: [tier-1, tier-2]
+    - id: GOV-3
+      text: "Data catalog plus lineage plus classification plus retention."
+      tiers: [tier-1, tier-2]
+    - id: GOV-4
+      text: "Fairness metrics plus appeal path plus audit trail plus human oversight."
+      tiers: [tier-1]
+  reliability:   # P6/P7/P8, Ch 9
+    - id: REL-1
+      text: "SLIs/SLOs plus error budget plus burn-rate alerts (incl. quality/safety)."
+      tiers: [tier-1, tier-2]
+    - id: REL-2
+      text: "Progressive delivery plus eval gate plus one-action rollback plus kill switches."
+      tiers: [tier-1, tier-2, tier-3]
+    - id: REL-3
+      text: "Load/soak sign-off; deployment runbook exists and is rehearsed."
+      tiers: [tier-1, tier-2]
+    - id: REL-4
+      text: "Cell containment; DR tested by restore plus a game day."
+      tiers: [tier-1]
+  cost:          # P6 Ch 11, P8 Ch 13, P9 Ch 8
+    - id: CST-1
+      text: "Cost per successful request tracked and attributed."
+      tiers: [tier-1, tier-2]
+    - id: CST-2
+      text: "Per-team budgets plus anomaly alerts plus forecast; utilisation managed."
+      tiers: [tier-1, tier-2]
+  organisation:  # Ch 1/10/11/12/13/14
+    - id: ORG-1
+      text: "Named owner plus on-call; built on the paved road."
+      tiers: [tier-1, tier-2, tier-3]
+    - id: ORG-2
+      text: "Quotas / rate limits plus tenancy in place."
+      tiers: [tier-1, tier-2]
+    - id: ORG-3
+      text: "Portability - standard API plus portable evals plus exit plan."
+      tiers: [tier-1]
+    - id: ORG-4
+      text: "Deprecation / change plan for whatever this replaces."
+      tiers: [tier-1, tier-2]

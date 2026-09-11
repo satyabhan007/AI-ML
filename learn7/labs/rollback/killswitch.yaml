@@ -1,0 +1,44 @@
+# AI-ML · Part 7 lab — feature-flag kill switches (Ch 9).
+# OpenFeature-style flag definitions. Default-safe, changeable in seconds, audited.
+# Each maps to a real fallback path (Ch 9 anti-patterns).
+flags:
+  ai_summary_enabled:
+    state: ENABLED
+    defaultVariant: "on"
+    variants:
+      on: true
+      off: false          # -> serves the previous non-AI experience
+    targeting:
+      # emergency: set state: DISABLED to force defaultVariant everywhere
+      description: Master switch for the AI summary feature.
+
+  ranker_llm_route:
+    state: ENABLED
+    defaultVariant: "primary"
+    variants:
+      primary: "ranker-llm@production"
+      fallback: "ranker-gbdt@production"   # cheaper, older, always-warm model
+    targeting:
+      description: Route model traffic; flip to fallback on a quality/latency incident.
+
+  agent_http_tool:
+    state: DISABLED         # least agency by default (P9 Ch 5)
+    defaultVariant: "off"
+    variants:
+      on: true
+      off: false
+    targeting:
+      description: Allow the agent's outbound http tool. Off unless explicitly needed.
+
+  streaming_responses:
+    state: ENABLED
+    defaultVariant: "on"
+    variants:
+      on: true
+      off: false           # -> buffered responses if streaming misbehaves
+    targeting:
+      description: Token streaming for chat endpoints.
+
+metadata:
+  owner: platform-team
+  review: quarterly        # stale flags rot into risk — track owner + expiry

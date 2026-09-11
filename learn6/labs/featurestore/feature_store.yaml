@@ -1,0 +1,19 @@
+# AI-ML · Part 6 lab — Feast repo config (Ch 5: one definition, two stores).
+# `feast apply` reads this + features.py.  `feast validate` / yamllint check it in CI.
+project: ai_ml_ranker
+provider: local
+registry: data/registry.db
+
+# OFFLINE store — full history, point-in-time joins for training
+offline_store:
+  type: file
+
+# ONLINE store — latest value per entity, single-digit-ms reads in the request path
+online_store:
+  type: redis
+  connection_string: "redis://redis:6379/0"
+
+entity_key_serialization_version: 2
+
+# how stale an online value may be before it is considered dead (Ch 5 anti-patterns)
+online_store_ttl: 86400
