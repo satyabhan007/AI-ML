@@ -1,0 +1,48 @@
+# AI-ML · Part 9 lab — governed model promotion (Ch 3).
+# States, gates and sign-offs, proportionate to risk tier. A promotion to
+# @production is a recorded status transition on the registry alias (P7 Ch 2),
+# not a silent push. CI: yamllint.
+workflow: model-promotion
+
+states: [proposed, validated, in-review, approved, deployed, monitored, retired]
+
+# what must be TRUE to leave a state
+gates:
+  proposed_to_validated:
+    - eval_gate_passed            # P7 Ch 8 — vs current prod model, frozen eval set
+    - data_validation_passed      # P7 Ch 3
+    - model_card_generated
+  validated_to_in_review:
+    - risk_tier_assigned
+    - security_review_passed      # P9 Ch 5 (tier-1/2)
+  in_review_to_approved:
+    tier-1:
+      approvers: [model-risk-committee, legal-compliance, owning-eng-lead]
+      quorum: all
+      evidence: [model_card, eval_report, risk_assessment, monitoring_plan, dpia]
+    tier-2:
+      approvers: [governance-delegate, owning-eng-lead]
+      quorum: all
+      evidence: [model_card, eval_report]
+    tier-3:
+      approvers: [owning-eng-lead]
+      quorum: any
+      evidence: [eval_report]     # automated gate + owner sign-off, recorded
+  approved_to_deployed:
+    - progressive_rollout_config_present   # P7 Ch 5
+    - rollback_action_tested               # P7 Ch 9
+  deployed_to_monitored:
+    - slo_dashboards_and_alerts_live       # P8
+
+# a governed change re-enters review proportionate to risk
+re_review_triggers:
+  - retrain
+  - training_data_distribution_shift
+  - prompt_or_threshold_change            # behaviour-defining (P7 Ch 2/10)
+  - new_use_case
+  - sustained_quality_or_fairness_regression
+
+records:
+  # every transition is appended here (who / when / why), immutable
+  store: audit-log://model-promotion
+  retention: 7y

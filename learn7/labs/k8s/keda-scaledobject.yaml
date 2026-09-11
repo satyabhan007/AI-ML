@@ -1,0 +1,19 @@
+# KEDA — event-driven autoscaling for the async batch-scoring workers (Ch 6 / P6 Ch 12).
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: batch-scorer
+spec:
+  scaleTargetRef:
+    name: batch-scorer
+  minReplicaCount: 0            # scale-to-zero is fine for a latency-tolerant queue worker
+  maxReplicaCount: 40
+  cooldownPeriod: 300
+  triggers:
+    - type: aws-sqs-queue
+      metadata:
+        queueURL: https://sqs.us-east-1.amazonaws.com/000000000000/scoring-jobs
+        queueLength: "20"        # target messages per replica
+        awsRegion: us-east-1
+      authenticationRef:
+        name: keda-aws-credentials

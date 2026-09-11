@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: ranker-staging
+resources:
+  - ../../base
+replicas:
+  - name: ranker
+    count: 1
+images:
+  - name: registry.example.com/ranker
+    newTag: staging
+patches:
+  - target: { kind: Deployment, name: ranker }
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env/0/value
+        value: "@candidate"

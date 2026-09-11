@@ -1,0 +1,78 @@
+# AI-ML · Part 9 lab — the paved road as a Backstage Software Template (Ch 1).
+# `backstage-cli` scaffolds a new model service with CI, canary, OTel, registry
+# and tenancy wired in BY DEFAULT — opting out needs a logged justification.
+# CI: yamllint.
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: ai-ml-model-service
+  title: AI-ML Model Service (paved road)
+  description: >-
+    Scaffolds a model-serving repo with the standard stack pre-wired:
+    eval-gate CI (P7 Ch 3/8), GitOps + Argo Rollouts canary (P7 Ch 4/5),
+    OpenTelemetry (P8), model+prompt registry (P7 Ch 2), per-tenant quotas (P9 Ch 14).
+  tags: [ai-ml, paved-road, recommended]
+spec:
+  owner: group:platform-team
+  type: service
+  parameters:
+    - title: Service
+      required: [name, riskTier, owner]
+      properties:
+        name:
+          title: Service name
+          type: string
+          pattern: "^[a-z][a-z0-9-]{2,40}$"
+        owner:
+          title: Owning team
+          type: string
+          ui:field: OwnerPicker
+        riskTier:
+          title: Risk tier (P9 Ch 3 — sets the depth of governance review)
+          type: string
+          enum: [tier-1, tier-2, tier-3]
+          default: tier-2
+        modelType:
+          title: Model type
+          type: string
+          enum: [llm-vllm, classic-triton, python-bento]
+          default: llm-vllm
+    - title: Opt-outs (each needs a reason, recorded on the PR)
+      properties:
+        skipEvalGate:
+          type: boolean
+          default: false
+        customBaseImage:
+          type: boolean
+          default: false
+  steps:
+    - id: fetch
+      name: Fetch skeleton
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          name: ${{ parameters.name }}
+          owner: ${{ parameters.owner }}
+          riskTier: ${{ parameters.riskTier }}
+          modelType: ${{ parameters.modelType }}
+    - id: publish
+      name: Publish repo
+      action: publish:github
+      input:
+        repoUrl: github.com?owner=your-org&repo=${{ parameters.name }}
+        defaultBranch: main
+        protectDefaultBranch: true
+        requiredStatusCheckContexts:
+          - ml-ci / eval-gate
+          - ml-ci / perf-smoke
+    - id: register
+      name: Register in the catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
+  output:
+    links:
+      - title: Repo
+        url: ${{ steps.publish.output.remoteUrl }}

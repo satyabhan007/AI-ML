@@ -1,0 +1,41 @@
+# AI-ML · Part 9 lab — NIST AI RMF gap-assessment checklist (Ch 6).
+# Grouped by the four AI RMF functions. `score.py` reads this + a set of answers
+# and produces a per-function maturity score + a gap list.  CI: yamllint + score.py
+framework: "NIST AI RMF 1.0"
+scale: [0, 1, 2, 3]   # 0 absent · 1 ad hoc · 2 defined · 3 managed+measured
+
+functions:
+  govern:
+    - id: GV-1
+      text: "An AI policy plus an accountable owner exist for each system."
+    - id: GV-2
+      text: "Risk tiering is applied and drives the depth of review (Ch 3)."
+    - id: GV-3
+      text: "A model inventory lists every production model, owner, tier, last review."
+    - id: GV-4
+      text: "A cross-functional body signs off tier-1 models; minutes recorded."
+  map:
+    - id: MP-1
+      text: "Intended and out-of-scope use are documented per system (model card)."
+    - id: MP-2
+      text: "Data provenance, lineage and classification are catalogued (Ch 4)."
+    - id: MP-3
+      text: "Stakeholders and potential harms (incl. to non-users) are identified."
+  measure:
+    - id: MS-1
+      text: "Accuracy and robustness evaluated with slices plus adversarial cases (P7 Ch 8)."
+    - id: MS-2
+      text: "Fairness metrics chosen, justified, and monitored per group (Ch 7)."
+    - id: MS-3
+      text: "Online quality and safety metrics tracked with SLOs (P8 Ch 4/7/9)."
+    - id: MS-4
+      text: "Drift and data quality monitored with proxy signals (P8 Ch 8)."
+  manage:
+    - id: MG-1
+      text: "Progressive delivery plus one-action rollback plus kill switches (P7 Ch 5/9)."
+    - id: MG-2
+      text: "Incident response and blameless postmortems for AI issues (P8 Ch 16)."
+    - id: MG-3
+      text: "A contestability / appeal path exists for high-risk decisions (Ch 7)."
+    - id: MG-4
+      text: "Change control - retrain, prompt or threshold changes are re-reviewed."

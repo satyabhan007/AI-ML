@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ranker
+  labels:
+    app.kubernetes.io/name: ranker
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ranker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ranker
+    spec:
+      terminationGracePeriodSeconds: 120
+      containers:
+        - name: server
+          image: registry.example.com/ranker@sha256:2222222222222222222222222222222222222222222222222222222222222222
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: MODEL_ALIAS
+              value: "@production"
+          resources:
+            requests:
+              cpu: "1"
+              memory: 2Gi
+            limits:
+              cpu: "2"
+              memory: 3Gi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 20

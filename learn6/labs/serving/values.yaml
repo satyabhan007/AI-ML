@@ -1,0 +1,41 @@
+# AI-ML · Part 6 lab — values for the KServe InferenceService (vLLM runtime).
+# helm lint learn6/labs/serving   validates this in CI.
+model:
+  name: ranker-llm
+  # pulled by digest from an internal registry / bucket (P7 Ch 1/2), never a mutable tag
+  storageUri: "s3://models/ranker-llm@sha256:0000000000000000000000000000000000000000000000000000000000000000"
+
+runtime:
+  image: "vllm/vllm-openai:v0.6.3"
+  args:
+    - "--model=/mnt/models"
+    - "--served-model-name=ranker-llm"
+    - "--max-model-len=8192"
+    - "--gpu-memory-utilization=0.90"
+    - "--enable-prefix-caching"        # Ch 8: reuse KV for the shared system prompt
+    - "--max-num-seqs=32"              # Ch 9: continuous-batching cap, set from a load test
+
+resources:
+  limits:
+    nvidia.com/gpu: 1
+    memory: 24Gi
+  requests:
+    nvidia.com/gpu: 1
+    memory: 20Gi
+
+# request-driven autoscaling; keep a warm floor (Ch 4 / P7 Ch 6 — cold start is minutes)
+autoscaling:
+  minReplicas: 2
+  maxReplicas: 14
+  target: 20                 # concurrent requests per replica
+  scaleMetric: concurrency
+
+# progressive delivery (P7 Ch 5): send 10% to the canary revision
+canaryTrafficPercent: 10
+
+nodeSelector:
+  cloud.google.com/gke-accelerator: nvidia-l4
+tolerations:
+  - key: nvidia.com/gpu
+    operator: Exists
+    effect: NoSchedule

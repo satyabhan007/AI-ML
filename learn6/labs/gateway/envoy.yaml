@@ -1,0 +1,71 @@
+# AI-ML · Part 6 lab — Envoy config for the inference gateway.
+# route timeout + retry policy (Ch 13) and outlier detection = circuit breaking.
+admin:
+  address:
+    socket_address: { address: 0.0.0.0, port_value: 9901 }
+
+static_resources:
+  listeners:
+    - name: data_plane
+      address:
+        socket_address: { address: 0.0.0.0, port_value: 10000 }
+      filter_chains:
+        - filters:
+            - name: envoy.filters.network.http_connection_manager
+              typed_config:
+                "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                stat_prefix: ingress_http
+                access_log:
+                  - name: envoy.access_loggers.stdout
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
+                route_config:
+                  name: local_route
+                  virtual_hosts:
+                    - name: models
+                      domains: ["*"]
+                      routes:
+                        - match: { prefix: "/" }
+                          route:
+                            cluster: model_pool
+                            timeout: 2s                     # per-request deadline
+                            retry_policy:
+                              retry_on: "5xx,reset,connect-failure,refused-stream"
+                              num_retries: 2
+                              per_try_timeout: 1s
+                              retry_back_off: { base_interval: 0.05s, max_interval: 0.25s }
+                http_filters:
+                  - name: envoy.filters.http.router
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+
+  clusters:
+    - name: model_pool
+      type: STRICT_DNS
+      lb_policy: ROUND_ROBIN
+      connect_timeout: 0.5s
+      # circuit breaking: cap outstanding work so one slow backend cannot pile up
+      circuit_breakers:
+        thresholds:
+          - priority: DEFAULT
+            max_connections: 200
+            max_pending_requests: 100
+            max_requests: 200
+            max_retries: 20
+      # outlier detection: eject a host after consecutive 5xx / gateway failures
+      outlier_detection:
+        consecutive_5xx: 3
+        consecutive_gateway_failure: 3
+        interval: 2s
+        base_ejection_time: 10s
+        max_ejection_percent: 50
+      load_assignment:
+        cluster_name: model_pool
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address: { address: model-a, port_value: 8080 }
+              - endpoint:
+                  address:
+                    socket_address: { address: model-b, port_value: 8080 }

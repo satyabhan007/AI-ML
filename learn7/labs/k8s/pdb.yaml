@@ -1,0 +1,10 @@
+# Keep enough capacity serving during node drains / rollouts (Ch 6).
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: ranker-llm
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ranker-llm

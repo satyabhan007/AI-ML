@@ -1,0 +1,75 @@
+# AI-ML · Part 8 lab — the standard observability stack (Ch 2).
+# OTel Collector -> Prometheus (metrics) + Tempo (traces) + Loki (logs), viewed in
+# Grafana. `telemetrygen` synthesises traces/metrics so the pipeline runs with
+# zero app code; see ../llm/instrument_demo.py for the instrumentation itself.
+#
+#   docker compose up -d
+#   open http://localhost:3000   (Grafana, anonymous admin)
+#   open http://localhost:9090   (Prometheus)
+#
+# CI: docker compose config -q  +  otelcol validate on ../otel/collector.yaml
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.109.0
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes:
+      - ../otel/collector.yaml:/etc/otelcol/config.yaml:ro
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+      - "8889:8889"   # Prometheus exporter scrape target
+    depends_on:
+      - tempo
+      - loki
+
+  prometheus:
+    image: prom/prometheus:v2.53.2
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--enable-feature=exemplar-storage"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ../rules:/etc/prometheus/rules:ro
+    ports:
+      - "9090:9090"
+
+  tempo:
+    image: grafana/tempo:2.6.0
+    command: ["-config.file=/etc/tempo/tempo.yaml"]
+    volumes:
+      - ./config/tempo.yaml:/etc/tempo/tempo.yaml:ro
+    ports:
+      - "3200:3200"
+
+  loki:
+    image: grafana/loki:3.2.0
+    command: ["-config.file=/etc/loki/local-config.yaml"]
+    ports:
+      - "3100:3100"
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_FEATURE_TOGGLES_ENABLE=traceqlEditor
+    volumes:
+      - ./config/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/ds.yaml:ro
+      - ../dashboards:/var/lib/grafana/dashboards:ro
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+      - tempo
+
+  telemetrygen:
+    image: ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:latest
+    command:
+      - "traces"
+      - "--otlp-endpoint=otel-collector:4317"
+      - "--otlp-insecure"
+      - "--rate=5"
+      - "--duration=3600s"
+      - "--service=ranker-llm"
+    depends_on:
+      - otel-collector

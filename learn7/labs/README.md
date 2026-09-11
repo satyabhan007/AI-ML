@@ -2,18 +2,17 @@
 
 > **Standard, not from-scratch.** These labs drive the *industry-standard* delivery
 > tools with minimal config — Docker, an OCI registry, GitHub Actions, Argo CD,
-> Argo Rollouts, Kubernetes, Terraform. Validated in CI (`.github/workflows/lab-tests.yml`).
-
-Landing in **Phase 2** alongside chapters 2–16:
+> Argo Rollouts, Kubernetes, Terraform. Validated in CI (`.github/workflows/lab-tests.yml`, job `parts_6_9`).
 
 | Lab | Contains | Validated with |
 |---|---|---|
-| `image/` | a digest-pinned, multi-stage inference `Dockerfile` + hashed `requirements.lock` + a startup env-assertion script | `hadolint`, `docker build` (CI: `--dry-run` parse) |
-| `ci/` | a reusable `ml-ci.yml` GitHub Actions workflow — data checks, schema/contract tests, an eval gate, a perf smoke | `actionlint` |
-| `gitops/` | an Argo CD `Application` + a Kustomize overlay per environment | `kustomize build`, `yamllint` |
-| `rollout/` | an Argo Rollouts `Rollout` with a canary strategy + `AnalysisTemplate` on p99 + error-rate | `kubeconform` |
-| `k8s/` | an inference `Deployment` with GPU requests/limits, a `PodDisruptionBudget`, an `HPA` and a KEDA `ScaledObject` | `kubeconform`, `yamllint` |
-| `iac/` | a small Terraform module (bucket + registry + endpoint) with a `staging` and `prod` workspace | `terraform validate`, `tflint` |
-| `rollback/` | a one-command `rollback.sh` + a feature-flag kill-switch config | `shellcheck`, `yamllint` |
+| [`image/`](image/) | a digest-pinned, multi-stage inference `Dockerfile` + a hashed `requirements.lock` + a startup env-assertion script | `hadolint` (locally); a CI compile of `assert_env.py` |
+| [`ci/`](ci/) | a reusable `ml-ci.yml` GitHub Actions workflow — data checks, contract tests, an eval gate, a perf smoke, then build | `actionlint` |
+| [`gitops/`](gitops/) | an Argo CD `Application` + a Kustomize base with a `staging` and `prod` overlay | `kustomize build`, `kubeconform` |
+| [`rollout/`](rollout/) | an Argo Rollouts `Rollout` (canary steps) + an `AnalysisTemplate` gating on p99, error-rate, and a quality metric | `kubeconform` |
+| [`k8s/`](k8s/) | an inference `Deployment` with GPU requests/limits + graceful termination, a `PodDisruptionBudget`, an `HPA` on queue depth, and a KEDA `ScaledObject` | `kubeconform` |
+| [`iac/`](iac/) | a small Terraform module (model bucket + ECR registry + a scoped serving IAM role) with `staging`/`prod` tfvars | `terraform validate`, `terraform fmt -check` |
+| [`rollback/`](rollback/) | a one-command `rollback.sh` (model alias / config / feature-flag) + a kill-switch flag config | `shellcheck`, `yamllint` |
 
-Until Phase 2 lands, this directory is intentionally a placeholder so links resolve.
+Run `helm lint`/`kubeconform`/`terraform validate` etc. locally as shown in each
+lab's header comment or `iac/README.md`.

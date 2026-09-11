@@ -72,7 +72,7 @@ jobs:
 
   # Parts 6-9 are static courses (shared renderer + lazy per-chapter data) plus
   # runnable infra configs under learnN/labs/. This job syntax-checks the course
-  # JS/JSON and validates any lab config files that have landed.
+  # JS/JSON and validates every lab config with the standard tool for its kind.
   parts_6_9:
     runs-on: ubuntu-latest
     steps:
@@ -89,10 +89,15 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+
       - name: Syntax-check the shared renderer and every course data file
         run: |
           node --check assets/course.js
-          for f in $(find learn6 learn7 learn8 learn9 -name '*.js'); do
+          for f in $(find learn6 learn7 learn8 learn9 -path '*/assets/*' -name '*.js'); do
             echo "check $f"; node --check "$f"
           done
 
@@ -103,20 +108,112 @@ jobs:
             test -f "$p/assets/ch/01.js"   || { echo "missing $p/assets/ch/01.js"; exit 1; }
           done
 
-      - name: Validate lab config files (YAML / JSON / shell) if present
+      - name: Install lab-config validators (yamllint, shellcheck, kustomize, kubeconform, actionlint)
         run: |
-          pip install --quiet yamllint
-          shopt -s globstar nullglob
-          y=(learn6/labs/**/*.y*ml learn7/labs/**/*.y*ml learn8/labs/**/*.y*ml learn9/labs/**/*.y*ml)
-          if [ ${#y[@]} -gt 0 ]; then yamllint -d "{extends: relaxed, rules: {line-length: disable}}" "${y[@]}"; else echo "no YAML labs yet"; fi
-          j=(learn6/labs/**/*.json learn7/labs/**/*.json learn8/labs/**/*.json learn9/labs/**/*.json)
-          for f in "${j[@]}"; do echo "json $f"; python -m json.tool "$f" > /dev/null; done
-          s=(learn6/labs/**/*.sh learn7/labs/**/*.sh learn8/labs/**/*.sh learn9/labs/**/*.sh)
-          for f in "${s[@]}"; do echo "sh $f"; bash -n "$f"; done
+          python -m pip install --quiet yamllint pyyaml
+          sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck >/dev/null
+          curl -sSL "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.4.3/kustomize_v5.4.3_linux_amd64.tar.gz" | tar xz
+          curl -sSL "https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz" | tar xz kubeconform
+          curl -sSL "https://github.com/rhysd/actionlint/releases/download/v1.7.1/actionlint_1.7.1_linux_amd64.tar.gz" | tar xz actionlint
+          sudo mv kustomize kubeconform actionlint /usr/local/bin/
+          # kubeconform can't validate a Helm .tpl file; kept out of the yaml/kubeconform globs
+          echo "LAB_HELM_TEMPLATES=learn6/labs/serving/templates" >> "$GITHUB_ENV"
 
-      - name: Run any zero-dep Python labs (each must exit 0)
+      - name: yamllint every lab YAML (excluding Helm templates)
+        run: |
+          shopt -s globstar nullglob
+          files=()
+          for f in learn6/labs/**/*.y*ml learn7/labs/**/*.y*ml learn8/labs/**/*.y*ml learn9/labs/**/*.y*ml; do
+            [[ "$f" == "$LAB_HELM_TEMPLATES"* ]] && continue
+            files+=("$f")
+          done
+          if [ ${#files[@]} -gt 0 ]; then
+            yamllint -d "{extends: relaxed, rules: {line-length: disable, truthy: disable}}" "${files[@]}"
+          else
+            echo "no YAML labs yet"
+          fi
+
+      - name: Validate JSON lab configs
+        run: |
+          shopt -s globstar nullglob
+          for f in learn6/labs/**/*.json learn7/labs/**/*.json learn8/labs/**/*.json learn9/labs/**/*.json; do
+            echo "json $f"; python -m json.tool "$f" > /dev/null
+          done
+
+      - name: Shell scripts — parse + shellcheck
+        run: |
+          shopt -s globstar nullglob
+          for f in learn6/labs/**/*.sh learn7/labs/**/*.sh learn8/labs/**/*.sh learn9/labs/**/*.sh; do
+            echo "check $f"; bash -n "$f"; shellcheck "$f"
+          done
+
+      - name: Compile-check every lab Python file
         run: |
           shopt -s globstar nullglob
           for f in learn6/labs/**/*.py learn7/labs/**/*.py learn8/labs/**/*.py learn9/labs/**/*.py; do
-            echo "run $f"; python "$f" > /dev/null
+            echo "compile $f"; python -m py_compile "$f"
           done
+
+      - name: Run the standalone lab scripts (each must exit 0)
+        run: |
+          python learn6/labs/capacity/sizing.py
+          python learn7/labs/image/assert_env.py --dry-run
+          python learn8/labs/llm/instrument_demo.py
+          python learn8/labs/drift/monitor.py
+          python learn9/labs/tenancy/simulate.py
+          python learn9/labs/airmf/score.py
+          python learn9/labs/finops/model.py
+          python learn9/labs/readiness/check.py
+
+      - name: actionlint — the reusable ml-ci.yml workflow
+        run: actionlint -shellcheck= learn7/labs/ci/ml-ci.yml
+
+      - name: kubeconform — plain Kubernetes manifests (CRDs ignored)
+        run: |
+          kubeconform -strict -ignore-missing-schemas -summary \
+            learn7/labs/k8s/ learn7/labs/rollout/ \
+            learn7/labs/gitops/base/ learn7/labs/gitops/application.yaml
+
+      - name: kustomize build — both overlays render and validate
+        run: |
+          for env in staging prod; do
+            echo "kustomize build overlays/$env"
+            kustomize build "learn7/labs/gitops/overlays/$env" \
+              | kubeconform -strict -ignore-missing-schemas -summary
+          done
+
+      - name: helm lint + render the KServe chart, then kubeconform it
+        run: |
+          helm lint learn6/labs/serving
+          helm template lab learn6/labs/serving \
+            | kubeconform -ignore-missing-schemas -summary
+
+      - name: terraform validate — the IaC lab (no credentials required)
+        working-directory: learn7/labs/iac
+        run: |
+          terraform init -backend=false -input=false
+          terraform validate
+          terraform fmt -check -recursive
+
+      - name: docker compose config — every compose lab
+        run: |
+          for f in learn6/labs/gateway/docker-compose.yml \
+                   learn6/labs/cache/docker-compose.yml \
+                   learn8/labs/stack/docker-compose.yml; do
+            echo "compose config $f"
+            docker compose -f "$f" config -q
+          done
+
+      - name: promtool check rules — the Prometheus SLO/burn-rate rules
+        run: |
+          docker run --rm -v "$PWD":/w --entrypoint promtool \
+            prom/prometheus:v2.53.2 check rules /w/learn8/labs/rules/prometheus-rules.yml
+
+      - name: otelcol validate — the Collector config (tail sampling, GenAI attrs)
+        run: |
+          docker run --rm -v "$PWD":/w otel/opentelemetry-collector-contrib:0.109.0 \
+            validate --config=/w/learn8/labs/otel/collector.yaml
+
+      - name: k6 inspect — the load-test script parses
+        run: |
+          docker run --rm -i grafana/k6:0.53.0 inspect - < learn6/labs/loadtest/script.js > /dev/null

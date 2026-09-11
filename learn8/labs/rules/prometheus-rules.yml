@@ -1,0 +1,106 @@
+# AI-ML · Part 8 lab — golden-signal recording rules + an SLO + multi-window
+# multi-burn-rate alerts (Ch 3 / Ch 4 / Ch 11).
+# Validate:  promtool check rules prometheus-rules.yml
+groups:
+  - name: ranker-llm.golden-signals
+    interval: 30s
+    rules:
+      - record: job:http_requests:rate5m
+        expr: sum by (service) (rate(http_requests_total{service="ranker-llm"}[5m]))
+
+      - record: job:http_errors:ratio5m
+        expr: |
+          sum by (service) (rate(http_requests_total{service="ranker-llm",code=~"5.."}[5m]))
+          /
+          sum by (service) (rate(http_requests_total{service="ranker-llm"}[5m]))
+
+      - record: job:http_latency:p99_5m
+        expr: |
+          histogram_quantile(0.99,
+            sum by (service, le) (rate(http_request_duration_seconds_bucket{service="ranker-llm",code!~"5.."}[5m])))
+
+      - record: job:gpu_utilisation:avg5m
+        expr: avg by (service) (avg_over_time(gpu_utilization_ratio{service="ranker-llm"}[5m]))
+
+      - record: job:cost_per_successful_request:5m
+        expr: |
+          sum by (service) (rate(llm_cost_usd_total{service="ranker-llm"}[5m]))
+          /
+          clamp_min(sum by (service) (rate(http_requests_total{service="ranker-llm",code!~"5.."}[5m])), 0.001)
+
+  # SLO: 99.5% of requests are successful AND fast (<300ms) over 28d.
+  # error budget = 0.5%. "bad" = a 5xx OR slower than 300ms.
+  # Alert on multi-window multi-burn-rate (Google SRE Workbook).
+  - name: ranker-llm.slo-burn
+    rules:
+      - record: slo:sli_bad:ratio_rate5m
+        expr: |
+          1 - (
+            sum(rate(http_request_duration_seconds_bucket{service="ranker-llm",code!~"5..",le="0.3"}[5m]))
+            /
+            clamp_min(sum(rate(http_request_duration_seconds_count{service="ranker-llm"}[5m])), 0.001)
+          )
+
+      - record: slo:sli_bad:ratio_rate1h
+        expr: |
+          1 - (
+            sum(rate(http_request_duration_seconds_bucket{service="ranker-llm",code!~"5..",le="0.3"}[1h]))
+            /
+            clamp_min(sum(rate(http_request_duration_seconds_count{service="ranker-llm"}[1h])), 0.001)
+          )
+
+      - record: slo:sli_bad:ratio_rate6h
+        expr: |
+          1 - (
+            sum(rate(http_request_duration_seconds_bucket{service="ranker-llm",code!~"5..",le="0.3"}[6h]))
+            /
+            clamp_min(sum(rate(http_request_duration_seconds_count{service="ranker-llm"}[6h])), 0.001)
+          )
+
+      - alert: RankerLLMErrorBudgetFastBurn
+        expr: |
+          slo:sli_bad:ratio_rate1h > (14.4 * 0.005)
+          and
+          slo:sli_bad:ratio_rate5m > (14.4 * 0.005)
+        for: 2m
+        labels:
+          severity: page
+          slo: ranker-llm-latency-availability
+        annotations:
+          summary: "Fast burn — ~2% of the 28d error budget in 1h"
+          runbook: "https://runbooks.example.com/ranker-llm#slo-fast-burn"
+
+      - alert: RankerLLMErrorBudgetSlowBurn
+        expr: |
+          slo:sli_bad:ratio_rate6h > (3 * 0.005)
+          and
+          slo:sli_bad:ratio_rate1h > (3 * 0.005)
+        for: 15m
+        labels:
+          severity: page
+          slo: ranker-llm-latency-availability
+        annotations:
+          summary: "Slow burn — steady error-budget erosion over 6h"
+          runbook: "https://runbooks.example.com/ranker-llm#slo-slow-burn"
+
+  - name: ranker-llm.quality-safety
+    rules:
+      - alert: RankerLLMGroundednessRegression
+        expr: |
+          avg_over_time(llm_groundedness_pass_ratio{service="ranker-llm"}[30m]) < 0.96
+        for: 15m
+        labels:
+          severity: page
+          slo: ranker-llm-quality
+        annotations:
+          summary: "Groundedness SLI below 96% — possible quality regression"
+          runbook: "https://runbooks.example.com/ranker-llm#quality"
+
+      - alert: RankerLLMPIILeak
+        expr: increase(llm_pii_in_output_postscrub_total{service="ranker-llm"}[15m]) > 0
+        labels:
+          severity: page
+          slo: ranker-llm-safety
+        annotations:
+          summary: "PII detected in output AFTER scrubbing — SLO is zero"
+          runbook: "https://runbooks.example.com/ranker-llm#pii"

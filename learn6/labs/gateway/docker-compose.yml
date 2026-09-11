@@ -1,0 +1,34 @@
+# AI-ML · Part 6 lab — inference gateway (Envoy) in front of two model stubs.
+#
+# Demonstrates Ch 3 (the inference gateway) + Ch 13 (timeouts, retries, circuit
+# breaking). The two "models" are go-httpbin stubs: hit /delay/N for a slow
+# response, /status/503 for an error — Envoy applies a 2s route timeout, retries
+# 5xx/reset twice, and trips a circuit breaker (outlier detection) on a bad host.
+#
+#   docker compose up -d
+#   curl -s localhost:10000/anything            # -> routed to a healthy model
+#   curl -s localhost:10000/delay/5             # -> 504 after the 2s timeout
+#   curl -s -w '%{http_code}\n' localhost:10000/status/503   # -> retried, then 503
+#   curl -s localhost:9901/clusters | grep outlier   # circuit-breaker state
+#
+# CI validates this file with:  docker compose -f docker-compose.yml config -q
+services:
+  gateway:
+    image: envoyproxy/envoy:v1.31-latest
+    command: ["-c", "/etc/envoy/envoy.yaml", "--service-cluster", "inference-gateway"]
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml:ro
+    ports:
+      - "10000:10000"   # data plane
+      - "9901:9901"     # admin (stats, clusters, config_dump)
+    depends_on:
+      - model-a
+      - model-b
+
+  model-a:
+    image: mccutchen/go-httpbin:v2.15.0
+    command: ["-port", "8080"]
+
+  model-b:
+    image: mccutchen/go-httpbin:v2.15.0
+    command: ["-port", "8080"]
